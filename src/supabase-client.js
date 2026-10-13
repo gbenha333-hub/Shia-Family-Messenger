@@ -38,3 +38,14 @@ export async function uploadMedia(conversationId,file) {
   if(error) throw error;
   return path;
 }
+
+export async function registerWithPhonePassword(phone,password){
+  const {data,error}=await requireClient().auth.signUp({phone,password});
+  if(error)throw error;
+  return data;
+}
+export async function loginWithPhonePassword(phone,password){
+  const {data,error}=await requireClient().auth.signInWithPassword({phone,password});
+  if(error)throw error;
+  return data;
+}
