@@ -42,11 +42,41 @@ body:has(#welcome:not(.hidden)){background:#061e1c}body:has(#welcome:not(.hidden
 .welcome.photo-ready #welcomeSignIn{top:35%}
 .welcome.photo-ready #welcomeExisting{top:74%;height:20%}
 .welcome.photo-ready .welcome-sky{height:100dvh;min-height:100dvh;max-width:480px;margin:auto}
- .app-brand-icon{width:44px;height:44px;object-fit:contain;vertical-align:middle;margin-inline-end:10px;border-radius:12px;background:white}header h1 .app-brand-icon{width:40px;height:40px} </style></head><body><main class="wrap"><header><h1><img class="app-brand-icon" src="./file_00000000aa28822f9c5a61eb034f6cfd.png" alt="شعار شبكة الأسرة والطفل الشيعي">شبكة الأسرة الشيعية</h1><small>تواصل • معرفة • مجتمع</small></header>
+ .app-brand-icon{width:44px;height:44px;object-fit:contain;vertical-align:middle;margin-inline-end:10px;border-radius:12px;background:white}header h1 .app-brand-icon{width:40px;height:40px} 
+/* Rose Pearl 2026 — functional mobile welcome */
+body:has(#welcome:not(.hidden)){background:#f9eff4}
+body:has(#welcome:not(.hidden)) .welcome{background:#f9eff4;color:#2d2044}
+body:has(#welcome:not(.hidden)) .welcome-sky{max-width:510px;margin:auto;min-height:100dvh;height:auto;background:radial-gradient(ellipse at 48% 75%,#ffdfc5 0%,transparent 35%),linear-gradient(165deg,#fff8f4 5%,#fae5ed 48%,#f1d5e7 100%);display:flex;flex-direction:column;justify-content:flex-start;padding:clamp(25px,5vh,52px) 20px 28px}
+body:has(#welcome:not(.hidden)) .welcome-sky:before{display:none}
+body:has(#welcome:not(.hidden)) .welcome-stars{display:none}
+body:has(#welcome:not(.hidden)) .welcome-brand{padding:0;display:flex;flex-direction:column;align-items:center;text-shadow:none;z-index:3}
+body:has(#welcome:not(.hidden)) .welcome-logo{width:min(52vw,210px);height:clamp(145px,27vh,230px);margin:0 auto 8px;display:flex;align-items:center;justify-content:center}
+body:has(#welcome:not(.hidden)) .welcome-logo svg{display:none}
+body:has(#welcome:not(.hidden)) .welcome-logo img{display:block;width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 12px 20px #9d426137)}
+body:has(#welcome:not(.hidden)) .welcome-brand h2{font-size:clamp(23px,6vw,31px);color:#392342;margin:3px 0 7px;line-height:1.4}
+body:has(#welcome:not(.hidden)) .welcome-brand p{color:#8b637c;font-size:14px;margin:0}
+.welcome-features{display:none}
+body:has(#welcome:not(.hidden)) .welcome-features{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin:clamp(23px,4vh,38px) 0 20px;position:relative;z-index:3}
+.welcome-feature{min-width:0;border:1px solid #fff;background:#ffffffc7;border-radius:18px;padding:13px 3px 12px;box-shadow:0 9px 23px #8e50721c;display:grid;justify-items:center;gap:6px;color:#35263d}
+.welcome-feature b{font-size:12px}.welcome-feature span{font-size:25px}
+body:has(#welcome:not(.hidden)) .welcome-scene{display:none}
+.welcome-quote{display:none}
+body:has(#welcome:not(.hidden)) .welcome-quote{display:block;color:#8d617a;font-size:13px;line-height:1.9;margin:6px 0 20px}
+body:has(#welcome:not(.hidden)) .welcome-actions{position:relative;z-index:3;margin:auto 0 0;display:flex;flex-direction:column;gap:12px;width:100%;height:auto;padding:0}
+body:has(#welcome:not(.hidden)) .welcome-actions button{position:static;opacity:1;pointer-events:auto;width:100%;min-height:60px;border-radius:24px;font-size:19px;font-weight:800;box-shadow:0 10px 23px #a9326e29}
+body:has(#welcome:not(.hidden)) #welcomeStart{background:linear-gradient(115deg,#a9005c,#f40882);color:white;border:1px solid #e8b965}
+body:has(#welcome:not(.hidden)) #welcomeSignIn{background:#fffaf9;color:#342440;border:1.5px solid #d9ac64}
+body:has(#welcome:not(.hidden)) #welcomeExisting{background:transparent;box-shadow:none;border:0;min-height:30px;font-size:13px;color:#81566e}
+body:has(#welcome:not(.hidden)) .welcome.photo-ready .welcome-photo{display:none}
+body:has(#welcome:not(.hidden)) .welcome.photo-ready .welcome-brand,body:has(#welcome:not(.hidden)) .welcome.photo-ready .welcome-features{display:flex}
+body:has(#welcome:not(.hidden)) .welcome.photo-ready .welcome-features{display:grid}
+body:has(#welcome:not(.hidden)) .welcome.photo-ready .welcome-actions{position:relative;bottom:auto;left:auto;right:auto;display:flex;height:auto;pointer-events:auto}
+@media(max-height:710px){body:has(#welcome:not(.hidden)) .welcome-sky{padding-top:14px}.welcome-features{margin:13px 0!important}.welcome-quote{margin:0 0 10px!important}body:has(#welcome:not(.hidden)) .welcome-logo{height:125px}}
+</style></head><body><main class="wrap"><header><h1><img class="app-brand-icon" src="./file_00000000aa28822f9c5a61eb034f6cfd.png" alt="شعار شبكة الأسرة والطفل الشيعي">شبكة الأسرة الشيعية</h1><small>تواصل • معرفة • مجتمع</small></header>
 <section id="welcome" class="welcome hidden" aria-label="شاشة البداية">
 <div class="welcome-sky"><img class="welcome-photo" id="welcomePhoto" src="./welcome-realistic.png" alt="شبكة الأسرة الشيعية — عائلة أمام العتبة الذهبية" decoding="async"><div class="welcome-stars">✧　·　✦　·　✧</div>
-<div class="welcome-brand"><div class="welcome-logo"><svg viewBox="0 0 130 150" fill="none" aria-hidden="true"><path d="M12 139V60Q31 44 65 9Q99 44 118 60V139H12Z" stroke="#e6bd71" stroke-width="5"/><path d="M23 138V65Q45 43 65 25Q85 43 107 65V138" stroke="#e6bd71" stroke-width="2"/><path d="M35 114V91Q35 80 47 75Q59 80 59 91V114M71 114V91Q71 80 83 75Q95 80 95 91V114" fill="#dfb66a"/><circle cx="47" cy="66" r="9" fill="#dfb66a"/><circle cx="83" cy="66" r="9" fill="#dfb66a"/><path d="M43 137v-10q0-16 16-18q16 2 16 18v10" fill="#e6bd71"/><circle cx="59" cy="100" r="10" fill="#e6bd71"/><path d="M65 9v-8" stroke="#e6bd71" stroke-width="2"/></svg></div><h2>شبكة الأسرة الشيعية</h2><p>تواصل · دعم · معرفة · مجتمع</p></div>
-<div class="welcome-scene" aria-hidden="true"><div class="welcome-glow"></div><div class="minaret left"></div><div class="minaret right"></div><div class="shrine"><div class="dome"></div><div class="drum"></div><div class="arches"></div></div><div class="family"><span class="father"></span><span class="son"></span><span class="mother"></span><span class="daughter"></span></div></div>
+<div class="welcome-brand"><div class="welcome-logo"><img src="./file_00000000aa28822f9c5a61eb034f6cfd.png" alt="شعار شبكة الأسرة والطفل الشيعي"><svg viewBox="0 0 130 150" fill="none" aria-hidden="true"><path d="M12 139V60Q31 44 65 9Q99 44 118 60V139H12Z" stroke="#e6bd71" stroke-width="5"/><path d="M23 138V65Q45 43 65 25Q85 43 107 65V138" stroke="#e6bd71" stroke-width="2"/><path d="M35 114V91Q35 80 47 75Q59 80 59 91V114M71 114V91Q71 80 83 75Q95 80 95 91V114" fill="#dfb66a"/><circle cx="47" cy="66" r="9" fill="#dfb66a"/><circle cx="83" cy="66" r="9" fill="#dfb66a"/><path d="M43 137v-10q0-16 16-18q16 2 16 18v10" fill="#e6bd71"/><circle cx="59" cy="100" r="10" fill="#e6bd71"/><path d="M65 9v-8" stroke="#e6bd71" stroke-width="2"/></svg></div><h2>شبكة الأسرة الشيعية</h2><p>تواصل · دعم · معرفة · مجتمع</p></div>
+<div class="welcome-features"><div class="welcome-feature"><span>♧</span><b>تواصل</b></div><div class="welcome-feature"><span>♥</span><b>دعم</b></div><div class="welcome-feature"><span>▤</span><b>معرفة</b></div><div class="welcome-feature"><span>♟</span><b>مجتمع</b></div></div><p class="welcome-quote">معاً نحو أسرة أكثر تلاحماً ووعياً</p><div class="welcome-scene" aria-hidden="true"><div class="welcome-glow"></div><div class="minaret left"></div><div class="minaret right"></div><div class="shrine"><div class="dome"></div><div class="drum"></div><div class="arches"></div></div><div class="family"><span class="father"></span><span class="son"></span><span class="mother"></span><span class="daughter"></span></div></div>
 <div class="welcome-actions"><button id="welcomeStart" class="gold-btn">ابدأ الآن <span>←</span></button><button id="welcomeSignIn" class="outline-btn">تسجيل الدخول</button><button id="welcomeExisting" class="text-btn">لديك حساب بالفعل؟</button></div>
 </div></section>
 <section id="setup" class="card hidden"><b>الربط غير مُفعّل بعد</b><p>لا يوجد مشروع Supabase مستقل مرتبط. بعد إنشائه أضف <code>config.js</code> اعتماداً على <code>config.example.js</code> ثم شغّل الصفحة على استضافة HTTPS.</p><a href="./index.html">العودة للواجهة التجريبية</a></section>
