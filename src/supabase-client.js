@@ -49,3 +49,20 @@ export async function loginWithPhonePassword(phone,password){
   if(error)throw error;
   return data;
 }
+
+const usernameEmail = username => {
+  const name=String(username).trim().toLowerCase();
+  if(!/^[a-z0-9_]{3,30}$/.test(name))throw Error('اسم المستخدم يجب أن يكون 3 إلى 30 حرفاً إنكليزياً أو رقماً أو _');
+  return name+'@users.shia-family.invalid';
+};
+export async function registerWithUsername(username,password){
+  if(password.length<8)throw Error('كلمة المرور قصيرة');
+  const {data,error}=await requireClient().auth.signUp({email:usernameEmail(username),password,options:{data:{username:username.toLowerCase()}}});
+  if(error)throw error;
+  return data;
+}
+export async function loginWithUsername(username,password){
+  const {data,error}=await requireClient().auth.signInWithPassword({email:usernameEmail(username),password});
+  if(error)throw error;
+  return data;
+}
