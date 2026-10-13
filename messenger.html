@@ -85,6 +85,29 @@ body:has(#welcome:not(.hidden)) #welcomeStart{top:0!important;height:35%!importa
 body:has(#welcome:not(.hidden)) #welcomeSignIn{top:39%!important;height:35%!important}
 body:has(#welcome:not(.hidden)) #welcomeExisting{top:79%!important;height:20%!important}
 @media(min-width:700px){body:has(#welcome:not(.hidden)) .welcome-sky{box-shadow:0 0 60px #0008}}
+
+/* Auth screen: immersive premium companion to the approved photographic welcome */
+body:has(#login:not(.hidden)){background:#071e20;min-height:100dvh}
+body:has(#login:not(.hidden)) .wrap{max-width:none;padding:0;min-height:100dvh;position:relative;isolation:isolate;display:flex;align-items:center;justify-content:center}
+body:has(#login:not(.hidden)) .wrap:before{content:"";position:fixed;inset:-22px;background:linear-gradient(180deg,#071b24aa,#071b24cc),url('./welcome-realistic.png') center 65%/cover no-repeat;filter:blur(9px);z-index:-2;pointer-events:none}
+body:has(#login:not(.hidden)) .wrap:after{content:"";position:fixed;inset:0;background:linear-gradient(180deg,#052e2c45,#041d23c9);z-index:-1;pointer-events:none}
+body:has(#login:not(.hidden)) header{display:none}
+body:has(#login:not(.hidden)) #login{position:relative;display:flex;flex-direction:column;max-width:440px;width:calc(100% - 32px);margin:24px auto!important;padding:34px 25px 26px!important;border:1px solid #e8d4a65e!important;border-radius:28px!important;background:linear-gradient(155deg,#fffffffa,#fffaf2f5)!important;box-shadow:0 25px 80px #0008,0 0 0 5px #ffffff0b!important}
+body:has(#login:not(.hidden)) #login:before{content:"";display:block!important;width:92px!important;height:92px!important;border-radius:23px!important;background:#fff url('./file_00000000aa28822f9c5a61eb034f6cfd.png') center/contain no-repeat!important;box-shadow:0 8px 22px #442e3321!important;margin:0 auto 14px!important}
+body:has(#login:not(.hidden)) #login h3{font-size:25px!important;color:#163c34!important;margin:0 0 6px!important}
+body:has(#login:not(.hidden)) #login>small:first-of-type{font-size:13px!important;color:#65716a!important;margin:0 auto 24px!important}
+body:has(#login:not(.hidden)) #login input{height:56px!important;border-radius:15px!important;background:#f8f9f6!important;border:1px solid #dce5df!important;font-size:15px!important;margin-bottom:13px!important}
+body:has(#login:not(.hidden)) #login input:focus{border-color:#b89a58!important;box-shadow:0 0 0 3px #d5b76a35!important}
+body:has(#login:not(.hidden)) #login .row{gap:11px!important;margin:4px 0 12px!important}
+body:has(#login:not(.hidden)) #login .row button{min-height:54px!important;border-radius:16px!important}
+body:has(#login:not(.hidden)) #passwordLogin{background:linear-gradient(130deg,#063e37,#0a725c)!important;color:white}
+body:has(#login:not(.hidden)) #passwordRegister{background:#f0f5f1!important;color:#174c3e!important;border:1px solid #dce6dc!important}
+body:has(#login:not(.hidden)) #passwordReset{color:#0d5a48!important;margin:2px auto 12px!important}
+body:has(#login:not(.hidden)) #login>small:last-child{color:#79837e!important;font-size:11px!important}
+body:has(#login:not(.hidden)) #status{position:fixed;bottom:12px;left:16px;right:16px;max-width:440px;margin:auto;background:#fff!important;color:#a14c38;border-radius:12px}
+body:has(#login:not(.hidden)) #status:empty{display:none!important}
+#authBack{position:absolute;top:17px;right:17px;border:1px solid #e3e9e3;background:#f6f8f4;color:#235446;border-radius:50%;width:36px;height:36px;display:grid;place-items:center;padding:0;font-size:21px;box-shadow:none}
+@media(max-width:500px){body:has(#login:not(.hidden)) #login{padding:29px 20px 23px!important;margin:18px auto!important}body:has(#login:not(.hidden)) #login:before{width:80px!important;height:80px!important}body:has(#login:not(.hidden)) #login h3{font-size:22px!important}}
 </style></head><body><main class="wrap"><header><h1><img class="app-brand-icon" src="./file_00000000aa28822f9c5a61eb034f6cfd.png" alt="شعار شبكة الأسرة والطفل الشيعي">شبكة الأسرة الشيعية</h1><small>تواصل • معرفة • مجتمع</small></header>
 <section id="welcome" class="welcome hidden" aria-label="شاشة البداية">
 <div class="welcome-sky"><img class="welcome-photo" id="welcomePhoto" src="./welcome-realistic.png" alt="شبكة الأسرة الشيعية — عائلة أمام العتبة الذهبية" decoding="async"><div class="welcome-stars">✧　·　✦　·　✧</div>
@@ -93,7 +116,7 @@ body:has(#welcome:not(.hidden)) #welcomeExisting{top:79%!important;height:20%!im
 <div class="welcome-actions"><button id="welcomeStart" class="gold-btn">ابدأ الآن <span>←</span></button><button id="welcomeSignIn" class="outline-btn">تسجيل الدخول</button><button id="welcomeExisting" class="text-btn">لديك حساب بالفعل؟</button></div>
 </div></section>
 <section id="setup" class="card hidden"><b>الربط غير مُفعّل بعد</b><p>لا يوجد مشروع Supabase مستقل مرتبط. بعد إنشائه أضف <code>config.js</code> اعتماداً على <code>config.example.js</code> ثم شغّل الصفحة على استضافة HTTPS.</p><a href="./index.html">العودة للواجهة التجريبية</a></section>
-<section id="login" class="card hidden"><h3>أهلاً بك في شبكة الأسرة</h3><small>سجّل الدخول أو أنشئ حسابك للتواصل مع العائلة والأصدقاء.</small><input id="loginEmail" type="email" autocomplete="email" placeholder="البريد الإلكتروني"><input id="password" type="password" autocomplete="current-password" placeholder="كلمة المرور (8 أحرف على الأقل)"><div class="row"><button id="passwordLogin">دخول</button><button id="passwordRegister" class="secondary">إنشاء حساب</button></div><button id="passwordReset" class="secondary" type="button">نسيت كلمة المرور؟</button><small>إذا طُلب تأكيد البريد، افتح الرسالة المرسلة إلى بريدك ثم ارجع للتطبيق.</small></section>
+<section id="login" class="card hidden"><button id="authBack" type="button" aria-label="الرجوع إلى البداية">→</button><h3>أهلاً بك في شبكة الأسرة</h3><small>سجّل الدخول أو أنشئ حسابك للتواصل مع العائلة والأصدقاء.</small><input id="loginEmail" type="email" autocomplete="email" placeholder="البريد الإلكتروني"><input id="password" type="password" autocomplete="current-password" placeholder="كلمة المرور (8 أحرف على الأقل)"><div class="row"><button id="passwordLogin">دخول</button><button id="passwordRegister" class="secondary">إنشاء حساب</button></div><button id="passwordReset" class="secondary" type="button">نسيت كلمة المرور؟</button><small>إذا طُلب تأكيد البريد، افتح الرسالة المرسلة إلى بريدك ثم ارجع للتطبيق.</small></section>
 <section id="profile" class="card hidden"><h3>إعداد حسابك</h3><input id="username" placeholder="اسم مستخدم إنكليزي، 3–30 حرف"><input id="displayName" placeholder="اسم العرض"><button id="saveProfile">حفظ الملف الشخصي</button></section>
 <section id="main" class="hidden"><div class="card"><div class="row"><b id="who"></b><button id="logout" class="secondary">خروج</button></div><h3>✦ محادثة جديدة</h3><small>أدخل اسم المستخدم للطرف الآخر</small><div class="row"><input id="peer" placeholder="username"><button id="start">إنشاء</button></div></div><div class="card"><h3>المحادثات الخاصة</h3><div id="conversations"></div></div><div id="chat" class="card hidden"><h3 id="chatTitle">محادثة</h3><div id="messages" class="messages"></div><div class="row"><input id="message" placeholder="اكتب رسالتك هنا..."><button id="send">إرسال</button></div><div class="row"><input id="media" type="file" accept="image/*,video/*,audio/*"><button id="sendMedia" class="secondary">إرسال ملف</button></div></div></section><div id="status" role="status" class="card"></div></main>
 <script src="./config.js"></script><script type="module">
@@ -103,7 +126,8 @@ let user=null,active=null,channel=null,known=new Set(),otpChannel='sms',authMode
 const welcomePhoto=$('welcomePhoto');const activatePhoto=()=>{$('welcome').classList.add('photo-ready')};welcomePhoto.addEventListener('load',activatePhoto);if(welcomePhoto.complete&&welcomePhoto.naturalWidth>0)activatePhoto();
 function openAuth(mode){authMode=mode;show('welcome',false);show('login',true);$('passwordRegister').textContent=mode==='register'?'إنشاء حساب':'إنشاء حساب';$('login').scrollIntoView({block:'start'});}
 $('welcomeStart').onclick=()=>openAuth('register');$('welcomeSignIn').onclick=()=>openAuth('login');$('welcomeExisting').onclick=()=>openAuth('login');
-const notice=t=>{$('status').textContent=t};
+$('authBack').onclick=()=>{authMode='welcome';show('login',false);show('welcome',true);notice('')};
+const notice=t=>{$('status').textContent=t==='Auth session missing'?'':t};
 const fail=e=>notice(e?.message||String(e));
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 async function check(){if(!supabase){show('setup',true);notice('بانتظار إعداد Supabase المستقل');return}const {data:{user:u},error}=await supabase.auth.getUser();if(error&&error.message!=='Auth session missing')notice(error.message);else notice('');user=u;show('welcome',!user&&authMode==='welcome');show('login',!user&&authMode!=='welcome');show('main',false);show('profile',false);if(user){show('welcome',false);await loadProfile()}}
