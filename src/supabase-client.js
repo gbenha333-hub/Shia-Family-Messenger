@@ -4,8 +4,9 @@ const url = window.SUPABASE_URL;
 const key = window.SUPABASE_PUBLISHABLE_KEY;
 export const supabase = url && key ? createClient(url, key) : null;
 function requireClient(){ if(!supabase) throw new Error('Supabase غير مربوط بعد'); return supabase; }
-export async function sendPhoneOtp(phone) {
-  const {data,error}=await requireClient().auth.signInWithOtp({phone});
+export async function sendPhoneOtp(phone, channel='sms') {
+  if(!['sms','whatsapp'].includes(channel)) throw new Error('طريقة إرسال غير مدعومة');
+  const {data,error}=await requireClient().auth.signInWithOtp({phone,options:{channel}});
   if(error) throw error;
   return data;
 }
