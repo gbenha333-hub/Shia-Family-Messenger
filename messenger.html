@@ -72,6 +72,19 @@ body:has(#welcome:not(.hidden)) .welcome.photo-ready .welcome-brand,body:has(#we
 body:has(#welcome:not(.hidden)) .welcome.photo-ready .welcome-features{display:grid}
 body:has(#welcome:not(.hidden)) .welcome.photo-ready .welcome-actions{position:relative;bottom:auto;left:auto;right:auto;display:flex;height:auto;pointer-events:auto}
 @media(max-height:710px){body:has(#welcome:not(.hidden)) .welcome-sky{padding-top:14px}.welcome-features{margin:13px 0!important}.welcome-quote{margin:0 0 10px!important}body:has(#welcome:not(.hidden)) .welcome-logo{height:125px}}
+
+/* Restored approved full-screen realistic family-and-shrine welcome */
+body:has(#welcome:not(.hidden)){background:#071d1c!important}
+body:has(#welcome:not(.hidden)) .welcome{background:#071d1c!important;color:#fff}
+body:has(#welcome:not(.hidden)) .welcome-sky{position:relative;display:block!important;padding:0!important;width:100%;max-width:510px;min-height:100dvh;height:100dvh!important;background:#092c2d!important;overflow:hidden}
+body:has(#welcome:not(.hidden)) .welcome-photo{display:block!important;position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;z-index:5}
+body:has(#welcome:not(.hidden)) .welcome-brand,body:has(#welcome:not(.hidden)) .welcome-features,body:has(#welcome:not(.hidden)) .welcome-quote,body:has(#welcome:not(.hidden)) .welcome-scene,body:has(#welcome:not(.hidden)) .welcome-stars{display:none!important}
+body:has(#welcome:not(.hidden)) .welcome-actions{display:block!important;position:absolute!important;bottom:2.5%!important;left:7%!important;right:7%!important;width:auto!important;height:22%!important;margin:0!important;padding:0!important;z-index:7;pointer-events:none}
+body:has(#welcome:not(.hidden)) .welcome-actions button{display:block!important;position:absolute!important;left:0!important;width:100%!important;margin:0!important;padding:0!important;min-height:0!important;opacity:0!important;pointer-events:auto;border:0!important;box-shadow:none!important}
+body:has(#welcome:not(.hidden)) #welcomeStart{top:0!important;height:35%!important}
+body:has(#welcome:not(.hidden)) #welcomeSignIn{top:39%!important;height:35%!important}
+body:has(#welcome:not(.hidden)) #welcomeExisting{top:79%!important;height:20%!important}
+@media(min-width:700px){body:has(#welcome:not(.hidden)) .welcome-sky{box-shadow:0 0 60px #0008}}
 </style></head><body><main class="wrap"><header><h1><img class="app-brand-icon" src="./file_00000000aa28822f9c5a61eb034f6cfd.png" alt="شعار شبكة الأسرة والطفل الشيعي">شبكة الأسرة الشيعية</h1><small>تواصل • معرفة • مجتمع</small></header>
 <section id="welcome" class="welcome hidden" aria-label="شاشة البداية">
 <div class="welcome-sky"><img class="welcome-photo" id="welcomePhoto" src="./welcome-realistic.png" alt="شبكة الأسرة الشيعية — عائلة أمام العتبة الذهبية" decoding="async"><div class="welcome-stars">✧　·　✦　·　✧</div>
