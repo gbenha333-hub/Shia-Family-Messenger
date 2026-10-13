@@ -55,9 +55,9 @@ body:has(#welcome:not(.hidden)){background:#061e1c}body:has(#welcome:not(.hidden
 <section id="main" class="hidden"><div class="card"><div class="row"><b id="who"></b><button id="logout" class="secondary">خروج</button></div><h3>✦ محادثة جديدة</h3><small>أدخل اسم المستخدم للطرف الآخر</small><div class="row"><input id="peer" placeholder="username"><button id="start">إنشاء</button></div></div><div class="card"><h3>المحادثات الخاصة</h3><div id="conversations"></div></div><div id="chat" class="card hidden"><h3 id="chatTitle">محادثة</h3><div id="messages" class="messages"></div><div class="row"><input id="message" placeholder="اكتب رسالتك هنا..."><button id="send">إرسال</button></div><div class="row"><input id="media" type="file" accept="image/*,video/*,audio/*"><button id="sendMedia" class="secondary">إرسال ملف</button></div></div></section><div id="status" role="status" class="card"></div></main>
 <script src="./config.js"></script><script type="module">
 import {supabase,sendPhoneOtp,verifyPhoneOtp,sendMessage,subscribeToMessages,uploadMedia,registerWithUsername,loginWithUsername} from './src/supabase-client.js';
-$('welcomePhoto').addEventListener('load',()=>{$('welcome').classList.add('photo-ready')});
 const $=id=>document.getElementById(id), show=(id,yes)=>$(id).classList.toggle('hidden',!yes);
 let user=null,active=null,channel=null,known=new Set(),otpChannel='sms',authMode='welcome';
+const welcomePhoto=$('welcomePhoto');const activatePhoto=()=>{$('welcome').classList.add('photo-ready')};welcomePhoto.addEventListener('load',activatePhoto);if(welcomePhoto.complete&&welcomePhoto.naturalWidth>0)activatePhoto();
 function openAuth(mode){authMode=mode;show('welcome',false);show('login',true);$('passwordRegister').textContent=mode==='register'?'إنشاء حساب':'إنشاء حساب';$('login').scrollIntoView({block:'start'});}
 $('welcomeStart').onclick=()=>openAuth('register');$('welcomeSignIn').onclick=()=>openAuth('login');$('welcomeExisting').onclick=()=>openAuth('login');
 const notice=t=>{$('status').textContent=t};
