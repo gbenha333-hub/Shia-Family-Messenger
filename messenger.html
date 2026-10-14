@@ -360,6 +360,32 @@ body:has(#main:not(.hidden)) .wrap{background:transparent!important;max-width:13
 @media(max-width:849px){body:has(#main:not(.hidden)) .wrap{padding:0!important}#main.messenger-home{border-radius:0!important;border:0!important;min-height:100dvh!important}#main.messenger-home .messenger-top{padding-top:max(22px,env(safe-area-inset-top))!important}#main.messenger-home .bottom-nav{border-radius:22px 22px 0 0!important}#main.messenger-home #spacesPanel:not(.hidden){margin:12px!important;overflow:auto!important}#main.messenger-home #chat:not(.hidden){border-radius:0!important}}
 @media(min-width:850px){#main.messenger-home{height:calc(100dvh - 24px)!important;min-height:600px!important}#main.messenger-home:has(#spacesPanel:not(.hidden)) .messenger-top{display:block!important}#main.messenger-home:has(#spacesPanel:not(.hidden)) .chat-list-panel{display:block!important}#main.messenger-home:has(#spacesPanel:not(.hidden)) #chat{display:none!important}#main.messenger-home #spacesPanel:not(.hidden){grid-column:2!important;grid-row:1/3!important;margin:0!important;border-radius:0!important;min-height:0!important;overflow-y:auto!important}#main.messenger-home .bottom-nav{display:none!important}}
 @media(prefers-reduced-motion:reduce){#main.messenger-home *,#main.messenger-home *:before{animation:none!important;transition:none!important}}
+
+/* Mobile density and navigation correction, based on actual Android screenshot */
+@media(max-width:849px){
+html,body{overflow-x:hidden!important;width:100%!important}
+body:has(#main:not(.hidden)) .wrap{width:100%!important;max-width:100%!important;overflow-x:hidden!important}
+#main.messenger-home{width:100%!important;max-width:100%!important;overflow:visible!important;padding-bottom:calc(80px + env(safe-area-inset-bottom))!important}
+#main.messenger-home .messenger-top{padding:16px 15px 8px!important}
+#main.messenger-home .messenger-top>.row:first-child{padding-bottom:8px!important}
+#main.messenger-home .messenger-top h2{font-size:23px!important;margin:4px 0 10px!important}
+#main.messenger-home .glass-actions{margin-bottom:9px!important}
+#main.messenger-home .chat-filters{padding:8px 0 5px!important;margin-top:3px!important}
+#main.messenger-home .chat-list-panel{padding:8px 10px!important;overflow:visible!important;min-height:0!important}
+#main.messenger-home #conversations{gap:0!important}
+#main.messenger-home #conversations button{width:100%!important;min-height:70px!important;height:auto!important;margin:0 0 6px!important;padding:10px 12px!important;gap:11px!important;border-radius:17px!important;box-shadow:0 3px 12px #809ac322!important}
+#main.messenger-home .chat-person-icon{width:46px!important;height:46px!important;flex-basis:46px!important;font-size:20px!important;border-width:2px!important}
+#main.messenger-home .chat-person-info{gap:2px!important}
+#main.messenger-home .chat-person-info strong{font-size:14px!important}
+#main.messenger-home .chat-person-info small{font-size:11px!important;line-height:1.5!important}
+#main.messenger-home .chat-person-arrow{font-size:10px!important;white-space:nowrap!important}
+#main.messenger-home .bottom-nav{position:fixed!important;inset:auto 0 0 0!important;width:100vw!important;max-width:100vw!important;min-width:0!important;margin:0!important;padding:7px 5px max(10px,env(safe-area-inset-bottom))!important;display:grid!important;grid-template-columns:repeat(5,minmax(0,1fr))!important;align-items:stretch!important;justify-items:stretch!important;gap:0!important;box-sizing:border-box!important;border-radius:18px 18px 0 0!important;z-index:100!important}
+#main.messenger-home .bottom-nav button{display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;min-width:0!important;width:100%!important;max-width:100%!important;margin:0!important;padding:5px 1px!important;gap:3px!important;font-size:10px!important;line-height:1.25!important;white-space:normal!important;overflow:hidden!important;text-overflow:ellipsis!important;box-shadow:none!important}
+#main.messenger-home .bottom-nav button span{font-size:21px!important;line-height:1.3!important;display:grid!important;place-items:center!important;min-width:30px!important;min-height:30px!important}
+#main.messenger-home #chat:not(.hidden){bottom:calc(69px + env(safe-area-inset-bottom))!important;z-index:80!important}
+#main.messenger-home #spacesPanel:not(.hidden){margin:8px!important;padding:15px!important}
+#main.messenger-home #spacesPanel .space-item{min-height:65px!important;padding:9px!important}
+}
 </style></head><body class="booting"><main class="wrap"><header><h1><img class="app-brand-icon" src="./file_00000000aa28822f9c5a61eb034f6cfd.png" alt="شعار شبكة الأسرة والطفل الشيعي">شبكة الأسرة الشيعية</h1><small>تواصل • معرفة • مجتمع</small></header>
 <section id="welcome" class="welcome hidden" aria-label="شاشة البداية">
 <div class="welcome-sky"><img class="welcome-photo" id="welcomePhoto" src="./welcome-realistic.png" alt="شبكة الأسرة الشيعية — عائلة أمام العتبة الذهبية" decoding="async"><div class="welcome-stars">✧　·　✦　·　✧</div>
