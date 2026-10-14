@@ -15,7 +15,6 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
-          cache: npm
       - run: npm install
       - run: mkdir -p www && printf '<!doctype html><meta charset="utf-8"><title>Mawadda</title>' > www/index.html
       - run: npx cap add android
