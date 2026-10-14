@@ -612,10 +612,10 @@ body:has(#overlay:not([hidden])) .dock{display:none!important}
 
     <div id="authLogin" class="auth-panel">
       <h2>تسجيل الدخول</h2>
-      <p class="auth-hint">أدخل رقم هاتفك العراقي للمتابعة</p>
+      <p class="auth-hint">أدخل بريدك الإلكتروني وكلمة المرور للمتابعة</p>
       <label class="email-field">
-        <span class="email-icon">☎</span>
-        <input id="loginEmail" type="tel" inputmode="tel" autocomplete="tel" placeholder="07XXXXXXXXX" aria-label="رقم الهاتف">
+        <span class="email-icon">✉</span>
+        <input id="loginEmail" type="email" autocomplete="email" placeholder="name@example.com" aria-label="البريد الإلكتروني">
       </label>
       <button id="loginContinue" class="auth-primary" type="button">متابعة</button>
       <button id="showSignup" class="auth-link" type="button">ليس لديك حساب؟ <b>إنشاء حساب</b></button>
@@ -626,8 +626,8 @@ body:has(#overlay:not([hidden])) .dock{display:none!important}
       <p class="auth-hint">بيانات بسيطة لبدء حسابك في مَوَدَّة</p>
       <input id="signupName" class="auth-input" autocomplete="name" placeholder="الاسم">
       <label class="email-field">
-        <span class="email-icon">☎</span>
-        <input id="signupEmail" type="tel" inputmode="tel" autocomplete="tel" placeholder="07XXXXXXXXX" aria-label="رقم الهاتف">
+        <span class="email-icon">✉</span>
+        <input id="signupEmail" type="email" autocomplete="email" placeholder="name@example.com" aria-label="البريد الإلكتروني">
       </label>
       <input id="signupBirth" class="auth-input" type="date" aria-label="تاريخ الميلاد">
       <select id="signupGender" class="auth-input" aria-label="الجنس">
@@ -639,14 +639,14 @@ body:has(#overlay:not([hidden])) .dock{display:none!important}
 
     <div id="authOtp" class="auth-panel" hidden>
       <h2>رمز التحقق</h2>
-      <p class="auth-hint">أدخل رمز التحقق المرسل إلى هاتفك</p>
+      <p class="auth-hint">أدخل رمز التحقق المرسل إلى بريدك الإلكتروني</p>
       <div class="otp-row" dir="ltr">
         <input inputmode="numeric" maxlength="1"><input inputmode="numeric" maxlength="1"><input inputmode="numeric" maxlength="1">
         <input inputmode="numeric" maxlength="1"><input inputmode="numeric" maxlength="1"><input inputmode="numeric" maxlength="1">
       </div>
       <button id="verifyOtp" class="auth-primary" type="button">دخول إلى مَوَدَّة</button>
       <button id="authBack" class="auth-link" type="button">رجوع</button>
-      <small>رمز التحقق يُرسل برسالة SMS عند تفعيل خدمة الرسائل.</small>
+      <small>رمز التحقق يُرسل إلى البريد الإلكتروني عند تفعيل التحقق.</small>
     </div>
     <div class="auth-wave auth-wave-bottom"></div>
   </section>
@@ -1230,7 +1230,7 @@ if(!window.matchMedia('(prefers-reduced-motion: reduce)').matches)setInterval(()
  const $=id=>document.getElementById(id);
  const gate=$('authGate'),login=$('authLogin'),signup=$('authSignup'),otp=$('authOtp');
  const notify=message=>{try{toast(message)}catch(e){alert(message)}};
- const validPhone=value=>/^\+9647\d{9}$/.test(value);const normalizePhone=value=>{const digits=value.replace(/[^\d+]/g,'');return digits.startsWith('07')?'+964'+digits.slice(1):digits.startsWith('964')?'+'+digits:digits};
+ const validEmail=value=>/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
  const show=panel=>{login.hidden=panel!=='login';signup.hidden=panel!=='signup';otp.hidden=true};
  const addPassword=(panel,id,autocomplete)=>{
    let field=$(id);if(!field){field=document.createElement('input');field.id=id;field.type='password';field.className='auth-input';field.autocomplete=autocomplete;field.placeholder='كلمة المرور (6 أحرف على الأقل)';panel.insertBefore(field,panel.querySelector('.auth-primary'))}return field;
@@ -1254,23 +1254,23 @@ if(!window.matchMedia('(prefers-reduced-motion: reduce)').matches)setInterval(()
   finally{button.disabled=false;button.textContent=label}
  }
  $('loginContinue').onclick=()=>submit($('loginContinue'),async()=>{
-  const phone=normalizePhone($('loginEmail').value.trim()),password=loginPassword.value;
-  if(!validPhone(phone))throw Error('أدخل رقم هاتف عراقي صحيحاً مثل 07XXXXXXXXX');
+  const email=$('loginEmail').value.trim(),password=loginPassword.value;
+  if(!validEmail(email))throw Error('أدخل بريداً إلكترونياً صحيحاً');
   if(!password)throw Error('أدخل كلمة المرور');
-  const {data,error}=await sb.auth.signInWithPassword({phone,password});
+  const {data,error}=await sb.auth.signInWithPassword({email,password});
   if(error)throw error;
   if(!data.session)throw Error('تعذر تسجيل الدخول');
   gate.hidden=true;await applyRole(data.user);notify('أهلاً بك في مودة');
  });
  $('signupContinue').onclick=()=>submit($('signupContinue'),async()=>{
-  const name=$('signupName').value.trim(),phone=normalizePhone($('signupEmail').value.trim()),password=signupPassword.value,birth=$('signupBirth').value,gender=$('signupGender').value;
+  const name=$('signupName').value.trim(),email=$('signupEmail').value.trim(),password=signupPassword.value,birth=$('signupBirth').value,gender=$('signupGender').value;
   if(name.length<2)throw Error('اكتب الاسم');
   if(!validEmail(email))throw Error('أدخل بريداً إلكترونياً صحيحاً');
   if(password.length<6)throw Error('كلمة المرور يجب أن تكون 6 أحرف على الأقل');
   if(!birth||!gender)throw Error('أكمل تاريخ الميلاد والجنس');
-  const {data,error}=await sb.auth.signUp({phone,password,options:{data:{name,birth,gender}}});
+  const {data,error}=await sb.auth.signUp({email,password,options:{data:{name,birth,gender}}});
   if(error)throw error;
-  if(!data.session)throw Error('تم طلب إنشاء الحساب. يلزم تفعيل رسائل SMS والتحقق من رقم الهاتف في Supabase');
+  if(!data.session)throw Error('تم إنشاء الحساب لكن يلزم تأكيد البريد الإلكتروني إذا كان التحقق مفعلاً في Supabase');
   gate.hidden=true;await applyRole(data.user);notify('تم إنشاء الحساب بنجاح');
  });
  sb?.auth.onAuthStateChange((_event,session)=>{if(session?.user)applyRole(session.user);else document.body.classList.remove('mawadda-admin')});
