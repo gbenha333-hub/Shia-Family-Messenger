@@ -450,11 +450,11 @@ body.section-mode .app{padding-top:0!important}
 /* V40 — Mawadda curved sign-in / sign-up */
 .auth-gate{position:fixed;inset:0;z-index:20000;background:#edf5f6;display:flex;justify-content:center;align-items:stretch;overflow:auto;font-family:inherit}
 .auth-gate[hidden]{display:none!important}
-.auth-card{position:relative;width:min(100%,520px);min-height:100%;background:#fff;overflow:hidden;padding:170px 30px 150px;isolation:isolate}
+.auth-card{position:relative;width:min(100%,520px);min-height:100dvh;background:#fff;overflow:hidden;padding:110px 24px 110px;isolation:isolate}
 .auth-wave{position:absolute;left:-18%;width:136%;background:linear-gradient(135deg,#087f83,#28afb0);z-index:-1}
-.auth-wave-top{height:205px;top:-88px;border-radius:0 0 52% 58%/0 0 55% 48%;transform:rotate(-3deg)}
-.auth-wave-bottom{height:220px;bottom:-105px;border-radius:55% 48% 0 0/48% 55% 0 0;transform:rotate(4deg);box-shadow:0 -16px 0 #d9f1f0}
-.auth-brand{text-align:center;margin-bottom:28px}
+.auth-wave-top{height:155px;top:-110px;border-radius:0 0 52% 58%/0 0 55% 48%;transform:rotate(-3deg)}
+.auth-wave-bottom{height:150px;bottom:-115px;border-radius:55% 48% 0 0/48% 55% 0 0;transform:rotate(4deg);box-shadow:0 -16px 0 #d9f1f0}
+.auth-brand{text-align:center;margin-bottom:20px}
 .auth-logo{margin:auto;width:72px;height:72px;border-radius:24px;background:linear-gradient(145deg,#087f83,#35b7b6);color:white;display:grid;place-items:center;font-size:42px;box-shadow:0 14px 30px #15999a35}
 .auth-brand h1{margin:12px 0 2px;font-size:34px;color:#244650}
 .auth-brand p,.auth-hint{margin:0;color:#8a9ba0}
@@ -617,7 +617,7 @@ body:has(#overlay:not([hidden])) .dock{display:none!important}
         <span class="email-icon">✉</span>
         <input id="loginEmail" type="email" autocomplete="email" placeholder="name@example.com" aria-label="البريد الإلكتروني">
       </label>
-      <button id="loginContinue" class="auth-primary" type="button">متابعة</button>
+      <input id="loginPassword" class="auth-input" type="password" autocomplete="current-password" placeholder="كلمة المرور" aria-label="كلمة المرور"><button id="loginContinue" class="auth-primary" type="button">تسجيل الدخول</button>
       <button id="showSignup" class="auth-link" type="button">ليس لديك حساب؟ <b>إنشاء حساب</b></button>
     </div>
 
@@ -633,7 +633,7 @@ body:has(#overlay:not([hidden])) .dock{display:none!important}
       <select id="signupGender" class="auth-input" aria-label="الجنس">
         <option value="">الجنس</option><option value="female">أنثى</option><option value="male">ذكر</option>
       </select>
-      <button id="signupContinue" class="auth-primary" type="button">إنشاء الحساب</button>
+      <input id="signupPassword" class="auth-input" type="password" autocomplete="new-password" minlength="6" placeholder="كلمة المرور (6 أحرف على الأقل)" aria-label="كلمة المرور"><button id="signupContinue" class="auth-primary" type="button">إنشاء الحساب</button>
       <button id="showLogin" class="auth-link" type="button">لديك حساب؟ <b>تسجيل الدخول</b></button>
     </div>
 
