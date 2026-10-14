@@ -605,6 +605,15 @@ body:has(#overlay:not([hidden])) .dock{display:none!important}
  .auth-wave-top{height:120px!important}
  .auth-wave-bottom{display:none!important}
 }
+</style><style>
+/* V48 — fix auth taps and blue focus artefact on Android */
+.auth-wave{pointer-events:none!important;z-index:0!important}
+.auth-brand,.auth-panel{position:relative!important;z-index:20!important;pointer-events:auto!important}
+.auth-panel[hidden]{display:none!important}
+.auth-primary,.auth-link,.email-field,.auth-input,.otp-row input{position:relative!important;z-index:30!important;pointer-events:auto!important;touch-action:manipulation!important;-webkit-tap-highlight-color:transparent!important}
+.auth-primary,.auth-link{user-select:none!important;-webkit-user-select:none!important}
+.auth-primary:focus,.auth-link:focus,.email-field:focus-within,.auth-input:focus,.otp-row input:focus{outline:none!important;box-shadow:0 8px 24px rgba(22,126,136,.18)!important}
+.auth-primary:active{transform:scale(.985)!important}
 </style></head><body>
 <div id="authGate" class="auth-gate" dir="rtl">
   <section class="auth-card" aria-label="تسجيل الدخول إلى مَوَدَّة">
@@ -1092,9 +1101,10 @@ if(!window.matchMedia('(prefers-reduced-motion: reduce)').matches)setInterval(()
    const {data:{session}}=await sb.auth.getSession();
    if(session?.user){gate.hidden=true;await applyServerRole(session.user)} else gate.hidden=false;
  }
- document.getElementById('showSignup').addEventListener('click',()=>show('signup'));
- document.getElementById('showLogin').addEventListener('click',()=>show('login'));
- document.getElementById('authBack').addEventListener('click',()=>show('login'));
+ const tap=(id,fn)=>{const el=document.getElementById(id);if(!el)return;el.onclick=(e)=>{e.preventDefault();e.stopPropagation();fn(e)}};
+ tap('showSignup',()=>show('signup'));
+ tap('showLogin',()=>show('login'));
+ tap('authBack',()=>show('login'));
  document.getElementById('loginContinue').addEventListener('click',async()=>{
    const email=document.getElementById('loginEmail').value.trim();
    if(!validEmail(email)){toast('أدخل بريداً إلكترونياً صحيحاً');return}
