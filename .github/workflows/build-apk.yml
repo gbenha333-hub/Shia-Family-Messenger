@@ -6,6 +6,10 @@ on:
     paths:
       - 'capacitor.config.json'
       - 'package.json'
+      - 'index.html'
+      - 'messenger.html'
+      - 'src/**'
+      - 'config.js'
       - '.github/workflows/build-apk.yml'
 jobs:
   build:
@@ -16,7 +20,13 @@ jobs:
         with:
           node-version: '22'
       - run: npm install
-      - run: mkdir -p www && printf '<!doctype html><meta charset="utf-8"><title>Mawadda</title>' > www/index.html
+      - name: Package actual Mawadda web app
+        run: |
+          mkdir -p www/src
+          cp index.html messenger.html config.js www/
+          cp src/*.js www/src/
+          test -s www/messenger.html
+          test -s www/index.html
       - run: npx cap add android
       - uses: actions/setup-java@v4
         with:
