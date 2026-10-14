@@ -1131,9 +1131,13 @@ const storyLike=$('storyLike'); if(storyLike)storyLike.onclick=()=>{storyLike.te
 const storyReply=$('storyReply'); if(storyReply)storyReply.addEventListener('keydown',e=>{if(e.key==='Enter'&&storyReply.value.trim()){toast('تم إرسال الرد تجريبياً');storyReply.value=''}});
 $('storyOverlay').onclick=e=>{if(e.target===$('storyOverlay'))closeStory()};document.addEventListener('keydown',e=>{if(e.key==='Escape')closeStory()});
 
+const dailyGiftBank=[['🌷','المحبة','رسالة محبة','الكلمة الطيبة تترك أثراً جميلاً'],['💙','الطمأنينة','لحظة هدوء','خصص وقتاً لراحة قلبك'],['🌟','الأمل','بداية جديدة','كل صباح فرصة للخير'],['🌿','السكينة','هدية السكينة','تذكر نعمة تشكر الله عليها'],['📖','العلم','هدية المعرفة','اقرأ اليوم صفحة نافعة'],['🤲','الدعاء','دعوة طيبة','ادع لمن تحب'],['☀️','التفاؤل','نور اليوم','ابحث عن جانب جميل في يومك'],['🕊️','السلام','رسالة سلام','ابدأ بكلمة سلام'],['💐','الامتنان','هدية الشكر','اشكر شخصاً ساعدك'],['🌙','التأمل','لحظة تأمل','تأمل نعمة صغيرة'],['💚','الأسرة','صلة ومحبة','اسأل عن أحد أفراد أسرتك'],['✨','الإحسان','عمل طيب','اصنع معروفاً بسيطاً']];
+function dailyIndex(){const d=new Date();return Math.floor(Date.UTC(d.getFullYear(),d.getMonth(),d.getDate())/86400000)}
+function refreshDailyGifts(){document.querySelectorAll('.gift-card').forEach((b,i)=>{const g=dailyGiftBank[((dailyIndex()*7+i*5)%dailyGiftBank.length+dailyGiftBank.length)%dailyGiftBank.length];const front=b.querySelector('.gift-front'),back=b.querySelector('.gift-back');front.textContent=g[0];const label=document.createElement('small');label.textContent=g[1];front.append(label);back.textContent=g[2];const detail=document.createElement('small');detail.textContent=g[3];back.append(detail)})}
+refreshDailyGifts();
 let giftPosition=1,giftRevealed=false,giftStartX=0;
 function drawGifts(){document.querySelectorAll('.gift-card').forEach((b,i)=>{let d=i-giftPosition;const shift=d*112;b.style.setProperty('--shift',shift+'px');b.style.transform='translateX('+shift+'px) rotateY('+(d*13)+'deg) scale('+(d===0?1:.83)+')';b.style.zIndex=String(5-Math.abs(d));b.style.opacity=Math.abs(d)>1?'.5':'1';b.classList.toggle('flipped',giftRevealed&&i===giftPosition)});$('giftInstructions').textContent=giftRevealed?'🎉 هذه هديتك!':'اسحب يمين أو يسار، ثم اضغط على البطاقة بالوسط'}
-function resetGifts(){giftPosition=1;giftRevealed=false;drawGifts()}
+function resetGifts(){giftPosition=1;giftRevealed=false;refreshDailyGifts();drawGifts()}
 const giftStage=$('giftStage');giftStage.addEventListener('touchstart',e=>{giftStartX=e.touches[0].clientX},{passive:true});giftStage.addEventListener('touchend',e=>{let dx=e.changedTouches[0].clientX-giftStartX;if(Math.abs(dx)>35){giftPosition=Math.max(0,Math.min(2,giftPosition+(dx>0?1:-1)));giftRevealed=false;drawGifts()}},{passive:true});giftStage.addEventListener('click',e=>{const b=e.target.closest('.gift-card');if(!b)return;let i=Number(b.dataset.gift);if(i!==giftPosition){giftPosition=i;giftRevealed=false}else giftRevealed=!giftRevealed;drawGifts()});$('giftReset').onclick=resetGifts;
 render();loadOfficialPosts();
 
@@ -1179,9 +1183,11 @@ const quotes=[
 {text:'﴿وَقُل رَّبِّ زِدْنِي عِلْمًا﴾',source:'سورة طه — الآية ١١٤'},
 {text:'«كونوا دعاة للناس بغير ألسنتكم»',source:'الإمام جعفر الصادق عليه السلام'},
 {text:'﴿فَإِنَّ الذِّكْرَىٰ تَنفَعُ الْمُؤْمِنِينَ﴾',source:'سورة الذاريات — الآية ٥٥'}
+,{"text":"﴿وَبَشِّرِ الصَّابِرِينَ﴾","source":"البقرة: ١٥٥"},{"text":"﴿وَقُولُوا لِلنَّاسِ حُسْنًا﴾","source":"البقرة: ٨٣"},{"text":"﴿إِنَّ اللَّهَ مَعَ الصَّابِرِينَ﴾","source":"البقرة: ١٥٣"},{"text":"﴿وَلَا تَيْأَسُوا مِن رَّوْحِ اللَّهِ﴾","source":"يوسف: ٨٧"},{"text":"﴿فَاذْكُرُونِي أَذْكُرْكُمْ﴾","source":"البقرة: ١٥٢"},{"text":"﴿وَمَا تَوْفِيقِي إِلَّا بِاللَّهِ﴾","source":"هود: ٨٨"},{"text":"﴿رَّبِّ اشْرَحْ لِي صَدْرِي﴾","source":"طه: ٢٥"},{"text":"﴿وَالصُّلْحُ خَيْرٌ﴾","source":"النساء: ١٢٨"},{"text":"﴿وَتَعَاوَنُوا عَلَى الْبِرِّ وَالتَّقْوَىٰ﴾","source":"المائدة: ٢"},{"text":"﴿وَأَمَّا بِنِعْمَةِ رَبِّكَ فَحَدِّثْ﴾","source":"الضحى: ١١"},{"text":"﴿وَلَسَوْفَ يُعْطِيكَ رَبُّكَ فَتَرْضَىٰ﴾","source":"الضحى: ٥"},{"text":"﴿إِنَّ اللَّهَ لَا يُضِيعُ أَجْرَ الْمُحْسِنِينَ﴾","source":"التوبة: ١٢٠"},{"text":"﴿وَقُل رَّبِّ ارْحَمْهُمَا كَمَا رَبَّيَانِي صَغِيرًا﴾","source":"الإسراء: ٢٤"},{"text":"﴿إِنَّ اللَّهَ يَأْمُرُ بِالْعَدْلِ وَالْإِحْسَانِ﴾","source":"النحل: ٩٠"},{"text":"﴿وَالْكَاظِمِينَ الْغَيْظَ وَالْعَافِينَ عَنِ النَّاسِ﴾","source":"آل عمران: ١٣٤"}
 ];
-let current=0;const q=document.getElementById('wisdomQuote'),dots=document.getElementById('wisdomDots');
+let current=dailyIndex()%quotes.length;const q=document.getElementById('wisdomQuote'),dots=document.getElementById('wisdomDots');
 if(!q||!dots)return;
+q.textContent=quotes[current].text;document.getElementById('wisdomSource').textContent=quotes[current].source;
 function rotate(){q.classList.add('wisdom-out');setTimeout(()=>{current=(current+1)%quotes.length;q.textContent=quotes[current].text;document.getElementById("wisdomSource").textContent=quotes[current].source;dots.querySelectorAll('i').forEach((el,i)=>el.classList.toggle('on',i===current));q.classList.remove('wisdom-out')},360)}
 if(!window.matchMedia('(prefers-reduced-motion: reduce)').matches)setInterval(()=>{if(!document.hidden)rotate()},12000);
 })();
