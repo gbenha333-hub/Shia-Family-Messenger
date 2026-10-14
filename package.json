@@ -1,0 +1,1 @@
+{"name":"mawadda","version":"1.0.0","private":true,"scripts":{"cap:sync":"npx cap sync android","android":"npx cap open android"},"dependencies":{"@capacitor/android":"^8.0.0","@capacitor/cli":"^8.0.0","@capacitor/core":"^8.0.0"}}
