@@ -408,6 +408,17 @@ body:has(#main:not(.hidden)) .wrap{width:100%!important;max-width:100%!important
 #main.messenger-home .bottom-nav button span{font-size:22px!important}
 #main.messenger-home .bottom-nav button.nav-active{color:#1d72e2!important}
 }
+
+/* Android screenshot fix: eliminate legacy 50% transform on bottom nav */
+@media(max-width:849px){
+#main.messenger-home .bottom-nav{left:0!important;right:0!important;bottom:0!important;top:auto!important;transform:none!important;translate:none!important;width:100%!important;max-width:100%!important;min-width:0!important;box-sizing:border-box!important;display:grid!important;grid-template-columns:repeat(5,minmax(0,1fr))!important;direction:rtl!important;overflow:hidden!important}
+#main.messenger-home .bottom-nav button{flex:initial!important;min-width:0!important;width:100%!important;max-width:100%!important;white-space:nowrap!important;letter-spacing:-.35px!important}
+#main.messenger-home #conversations button{min-height:70px!important;max-height:78px!important;height:74px!important;padding:7px 8px!important;align-items:center!important}
+#main.messenger-home .chat-person-icon{width:47px!important;height:47px!important;flex:0 0 47px!important}
+#main.messenger-home .chat-person-info strong{font-size:14px!important}
+#main.messenger-home .chat-person-info small{font-size:11px!important}
+#main.messenger-home .chat-list-panel{padding-bottom:10px!important}
+}
 </style></head><body class="booting"><main class="wrap"><header><h1><img class="app-brand-icon" src="./file_00000000aa28822f9c5a61eb034f6cfd.png" alt="شعار شبكة الأسرة والطفل الشيعي">شبكة الأسرة الشيعية</h1><small>تواصل • معرفة • مجتمع</small></header>
 <section id="welcome" class="welcome hidden" aria-label="شاشة البداية">
 <div class="welcome-sky"><img class="welcome-photo" id="welcomePhoto" src="./welcome-realistic.png" alt="شبكة الأسرة الشيعية — عائلة أمام العتبة الذهبية" decoding="async"><div class="welcome-stars">✧　·　✦　·　✧</div>
