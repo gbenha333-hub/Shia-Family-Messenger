@@ -614,6 +614,21 @@ body:has(#overlay:not([hidden])) .dock{display:none!important}
 .auth-primary,.auth-link{user-select:none!important;-webkit-user-select:none!important}
 .auth-primary:focus,.auth-link:focus,.email-field:focus-within,.auth-input:focus,.otp-row input:focus{outline:none!important;box-shadow:0 8px 24px rgba(22,126,136,.18)!important}
 .auth-primary:active{transform:scale(.985)!important}
+</style><style>
+/* V49 — remove rectangular tap/focus block under auth switch */
+.auth-link{
+ display:block!important;width:auto!important;max-width:100%!important;
+ margin:18px auto 0!important;padding:8px 12px!important;
+ border:0!important;background:transparent!important;box-shadow:none!important;
+ border-radius:14px!important;color:#87979d!important;
+ -webkit-appearance:none!important;appearance:none!important;
+ -webkit-tap-highlight-color:transparent!important;outline:0!important
+}
+.auth-link b{color:#16858d!important}
+.auth-link:focus,.auth-link:focus-visible,.auth-link:active{
+ outline:0!important;box-shadow:none!important;background:transparent!important
+}
+.auth-panel{overflow:visible!important}
 </style></head><body>
 <div id="authGate" class="auth-gate" dir="rtl">
   <section class="auth-card" aria-label="تسجيل الدخول إلى مَوَدَّة">
