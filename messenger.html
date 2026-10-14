@@ -1085,9 +1085,12 @@ if(!window.matchMedia('(prefers-reduced-motion: reduce)').matches)setInterval(()
  document.getElementById('showLogin').addEventListener('click',()=>show('login'));
  document.getElementById('authBack').addEventListener('click',()=>show('login'));
  const validEmail=v=>/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim());
+ const OWNER_EMAIL='g.ben.ha333@gmail.com';
+ let pendingAuthEmail='';
+ const normalizeEmail=v=>String(v||'').trim().toLowerCase();
  document.getElementById('loginContinue').addEventListener('click',()=>{
    const v=document.getElementById('loginEmail').value;
-   if(!validEmail(v)){toast('أدخل بريداً إلكترونياً صحيحاً');return} show('otp');
+   if(!validEmail(v)){toast('أدخل بريداً إلكترونياً صحيحاً');return} pendingAuthEmail=normalizeEmail(v); show('otp');
  });
  document.getElementById('signupContinue').addEventListener('click',()=>{
    const name=document.getElementById('signupName').value.trim(),email=document.getElementById('signupEmail').value;
@@ -1095,7 +1098,7 @@ if(!window.matchMedia('(prefers-reduced-motion: reduce)').matches)setInterval(()
    if(name.length<2){toast('اكتب الاسم');return}
    if(!validEmail(email)){toast('أدخل بريداً إلكترونياً صحيحاً');return}
    if(!birth||!gender){toast('أكمل تاريخ الميلاد والجنس');return}
-   show('otp');
+   pendingAuthEmail=normalizeEmail(email); show('otp');
  });
  const boxes=[...document.querySelectorAll('.otp-row input')];
  boxes.forEach((box,i)=>{
@@ -1104,7 +1107,9 @@ if(!window.matchMedia('(prefers-reduced-motion: reduce)').matches)setInterval(()
  });
  document.getElementById('verifyOtp').addEventListener('click',()=>{
    if(boxes.map(x=>x.value).join('').length!==6){toast('أدخل رمز التحقق كاملاً');return}
-   gate.hidden=true; toast('أهلاً بك في مَوَدَّة');
+   try{localStorage.setItem('mawadda_current_email',pendingAuthEmail);localStorage.setItem('mawadda_account_role',pendingAuthEmail===OWNER_EMAIL?'owner':'member')}catch(e){}
+   document.body.classList.toggle('mawadda-admin',pendingAuthEmail===OWNER_EMAIL);
+   gate.hidden=true; toast(pendingAuthEmail===OWNER_EMAIL?'أهلاً بك، تم تفعيل لوحة الإدارة':'أهلاً بك في مَوَدَّة');
  });
 
 })();
