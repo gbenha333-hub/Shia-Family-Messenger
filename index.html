@@ -1,16 +1,5 @@
 <!doctype html>
-<html lang="ar" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>مَوَدَّة | شبكة الأسرة والطفل الشيعي</title></head>
-<body><p id="loading">جاري فتح مَوَدَّة…</p>
-<script>
-(async()=>{
- try{
-  const response=await fetch('./messenger.html?v=auth-fix-20261014b',{cache:'no-store'});
-  if(!response.ok)throw new Error('Failed to load application');
-  let html=await response.text();
-  document.open();document.write(html);document.close();
- }catch(error){
-  document.getElementById('loading').textContent='تعذر فتح التطبيق. أعد المحاولة.';
-  console.error(error);
- }
-})();
-</script></body></html>
+<html lang="ar" dir="rtl">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta http-equiv="cache-control" content="no-cache"><title>مَوَدَّة</title></head>
+<body><p>جاري فتح مَوَدَّة…</p><script>window.location.replace('./messenger.html?v=auth-direct-20261014');</script>
+<noscript><a href="./messenger.html">فتح مَوَدَّة</a></noscript></body></html>
