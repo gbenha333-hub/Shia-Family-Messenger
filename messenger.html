@@ -1292,8 +1292,8 @@ if(!window.matchMedia('(prefers-reduced-motion: reduce)').matches)setInterval(()
   if(!data.session)throw Error('تم إنشاء الحساب لكن يلزم تأكيد البريد الإلكتروني إذا كان التحقق مفعلاً في Supabase');
   gate.hidden=true;await applyRole(data.user);notify('تم إنشاء الحساب بنجاح');
  });
- sb?.auth.onAuthStateChange((_event,session)=>{if(session?.user){gate.hidden=true;applyRole(session.user)}else document.body.classList.remove('mawadda-admin')});
- if(sb)sb.auth.getSession().then(({data,error})=>{if(error){notify(error.message);return}gate.hidden=!(!data.session);if(data.session)applyRole(data.session.user)}).catch(e=>notify(e.message));
+ sb?.auth.onAuthStateChange((event,session)=>{if(session?.user){gate.hidden=true;applyRole(session.user)}else if(event==='SIGNED_OUT'){gate.hidden=false;document.body.classList.remove('mawadda-admin')}});
+ if(sb)sb.auth.getSession().then(async({data,error})=>{if(error){notify('تعذر استعادة الجلسة: '+error.message);return}if(data.session){gate.hidden=true;await applyRole(data.session.user);return}gate.hidden=false}).catch(e=>{gate.hidden=false;notify('تعذر التحقق من تسجيل الدخول: '+e.message)});
  else {gate.hidden=false;notify('خدمة تسجيل الدخول غير متاحة')}
 })();;
 ;
