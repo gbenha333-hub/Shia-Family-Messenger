@@ -955,7 +955,21 @@ const grid=$('profileGrid');
 if(!own.length){const n=el('div','profile-grid-item','＋');n.style.cursor='pointer';n.onclick=openComposer;grid.append(n)}else own.forEach(post=>{const tile=el('div','profile-grid-item');if(post.image){const img=el('img');img.src=post.image;img.alt='صورة منشورك';tile.append(img)}else tile.textContent='✦';tile.onclick=()=>{filter='mine';topic='';render();navigateSection('الرئيسية')};grid.append(tile)});
 document.querySelectorAll('[data-profile-story]').forEach(btn=>{btn.onclick=()=>{const id=btn.dataset.profileStory;if(id==='mine'){const upload=$('storyUpload');if(upload){upload.value='';upload.click()}else toast('تعذر فتح اختيار القصة');return}const idx=storyData.findIndex(st=>st.id===id);if(idx>=0)showStory(idx)}});
 const openSettings=()=>{const settings=$('profileEdit');settings.hidden=false;settings.scrollIntoView({behavior:'smooth',block:'start'});$('profileCategory').value=profile.category||'';$('profileGender').value=profile.gender||'';$('profileVisibility').value=profile.visibility||'public';$('showCategory').checked=profile.showCategory!==false;$('showLink').checked=profile.showLink!==false};
-$('editProfile').onclick=openSettings;$('profileOptions').onclick=openSettings;
+const openProfileMenu=()=>{
+ let shade=$('profileSideShade');
+ if(!shade){
+  const style=document.createElement('style');
+  style.textContent='.profile-side-shade{position:fixed;inset:0;background:#0006;z-index:99999}.profile-side{position:absolute;top:0;left:0;width:min(88vw,420px);height:100%;background:#fff;padding:28px 22px;box-sizing:border-box;direction:rtl;overflow:auto}.profile-side-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:25px;font-size:23px;font-weight:800}.profile-side-close{border:0;background:none;font-size:30px}.profile-side-row{display:flex;width:100%;align-items:center;border:0;border-bottom:1px solid #eee;background:#fff;padding:19px 4px;font:600 17px inherit;text-align:right;color:#263f45}.profile-side-row b{margin-left:14px;font-size:21px}.profile-side-row span{margin-right:auto;color:#899}.profile-side-logout{color:#e36b79;border-bottom:0;margin-top:22px}';
+  document.head.appendChild(style);
+  shade=document.createElement('div');shade.id='profileSideShade';shade.className='profile-side-shade';
+  shade.innerHTML='<aside class="profile-side"><div class="profile-side-head"><strong>الإعدادات والنشاط</strong><button class="profile-side-close" type="button">×</button></div><button class="profile-side-row"><b>⚙</b>الإعدادات والخصوصية<span>‹</span></button><button class="profile-side-row"><b>♙</b>حالة الحساب<span>‹</span></button><button class="profile-side-row"><b>🔔</b>الإشعارات<span>‹</span></button><button class="profile-side-row"><b>ⓘ</b>حول مَوَدَّة<span>‹</span></button><button class="profile-side-row profile-side-logout" id="profileLogout"><b>↪</b>تسجيل الخروج</button></aside>';
+  document.body.appendChild(shade);
+  shade.querySelector('.profile-side-close').onclick=()=>shade.remove();
+  shade.onclick=e=>{if(e.target===shade)shade.remove()};
+  $('profileLogout').onclick=async()=>{try{if(window.supabase&&window.SUPABASE_URL&&window.SUPABASE_PUBLISHABLE_KEY){const client=window.supabase.createClient(window.SUPABASE_URL,window.SUPABASE_PUBLISHABLE_KEY);await client.auth.signOut()}}catch(e){} location.reload()};
+ }
+};
+$('editProfile').onclick=openSettings;$('profileOptions').onclick=openProfileMenu;
 $('closeProfileEdit').onclick=()=>{$('profileEdit').hidden=true;window.scrollTo({top:0,behavior:'smooth'})};
 $('shareProfile').onclick=async()=>{try{if(navigator.share)await navigator.share({title:'مَوَدَّة',text:'ملفي التجريبي على مَوَدَّة'});else toast('مشاركة الملف تتطلب نشر التطبيق على الإنترنت')}catch{}};
 $('saveProfile').onclick=()=>{const name=$('profileName').value.trim().slice(0,40)||'عضو مَوَدَّة',bio=$('profileBio').value.trim().slice(0,160),link=$('profileLink').value.trim().slice(0,300),category=$('profileCategory').value,gender=$('profileGender').value,visibility=$('profileVisibility').value,showCategory=$('showCategory').checked,showLink=$('showLink').checked;if(link&&!/^https?:\/\//i.test(link)){toast('الرابط يجب أن يبدأ بـ https:// أو http://');return}try{localStorage.setItem('sila_demo_profile_v1',JSON.stringify({name,bio,link,category,gender,visibility,showCategory,showLink,photo:currentPhoto}))}catch{toast('تعذر حفظ الصورة؛ مساحة المتصفح ممتلئة');return}renderProfile();toast('تم حفظ الملف الشخصي والصورة محلياً')};
