@@ -4,11 +4,9 @@
 <script>
 (async()=>{
  try{
-  const response=await fetch('./messenger.html?v=auth-fix-20261014',{cache:'no-store'});
+  const response=await fetch('./messenger.html?v=auth-fix-20261014b',{cache:'no-store'});
   if(!response.ok)throw new Error('Failed to load application');
   let html=await response.text();
-  const authScript='<script src="./src/auth-password.js?v=auth-fix-20261014"></'+'script>';
-  html=html.replace('</body>',authScript+'</body>');
   document.open();document.write(html);document.close();
  }catch(error){
   document.getElementById('loading').textContent='تعذر فتح التطبيق. أعد المحاولة.';
