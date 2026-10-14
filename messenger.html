@@ -964,6 +964,46 @@ const openProfileMenu=()=>{
   shade=document.createElement('div');shade.id='profileSideShade';shade.className='profile-side-shade';
   shade.innerHTML='<aside class="profile-side"><div class="profile-side-head"><strong>الإعدادات والنشاط</strong><button class="profile-side-close" type="button">×</button></div><button class="profile-side-row"><b>⚙</b>الإعدادات والخصوصية<span>‹</span></button><button class="profile-side-row"><b>♙</b>حالة الحساب<span>‹</span></button><button class="profile-side-row"><b>🔔</b>الإشعارات<span>‹</span></button><button class="profile-side-row"><b>ⓘ</b>حول مَوَدَّة<span>‹</span></button><button class="profile-side-row profile-side-logout" id="profileLogout"><b>↪</b>تسجيل الخروج</button></aside>';
   document.body.appendChild(shade);
+  const menuButtons=shade.querySelectorAll('.profile-side-row:not(.profile-side-logout)');
+  const showDetail=(title,body)=>{
+   let detail=shade.querySelector('#mawaddaMenuDetail');
+   if(!detail){detail=document.createElement('section');detail.id='mawaddaMenuDetail';detail.style.cssText='position:absolute;inset:0;background:#fff;padding:24px 20px;overflow:auto;z-index:3;direction:rtl';shade.querySelector('.profile-side').appendChild(detail)}
+   detail.innerHTML='<button type="button" id="mawaddaDetailBack" style="border:0;background:#eef7f7;color:#176f77;border-radius:15px;padding:12px 18px;font-size:17px">→ رجوع</button><h2 style="margin:24px 0;color:#25434b">'+title+'</h2><div id="mawaddaDetailContent" style="font-size:16px;line-height:2;color:#344c53"></div>';
+   detail.querySelector('#mawaddaDetailContent').appendChild(body);
+   detail.querySelector('#mawaddaDetailBack').onclick=()=>detail.remove();
+  };
+  const paragraph=t=>{const p=document.createElement('p');p.textContent=t;return p};
+  menuButtons[0].onclick=()=>{
+   const content=document.createElement('div');
+   content.append(paragraph('التحكم بخصوصية ملفك الشخصي والمعلومات الظاهرة للآخرين.'));
+   const profile=getProfile();
+   const field=document.createElement('label');field.textContent='خصوصية الحساب';field.style.display='block';
+   const select=document.createElement('select');select.style.cssText='display:block;width:100%;padding:15px;border:1px solid #bdd5d8;border-radius:14px;margin:12px 0 20px;background:#f4f9f9';
+   [['public','حساب عام'],['private','حساب خاص']].forEach(([v,t])=>{const o=document.createElement('option');o.value=v;o.textContent=t;select.append(o)});
+   select.value=profile.visibility||'public';field.append(select);content.append(field);
+   const info=paragraph('هذا الإعداد يتحكم بعرض بيانات الملف في واجهة التطبيق. حماية المنشورات من الوصول غير المصرح به تحتاج أيضاً إلى سياسات قاعدة البيانات.');
+   content.append(info);
+   const save=document.createElement('button');save.textContent='حفظ الخصوصية';save.style.cssText='width:100%;background:#128b90;color:white;border:0;border-radius:18px;padding:15px;font-size:17px';
+   save.onclick=()=>{const p=getProfile();p.visibility=select.value;localStorage.setItem('mawadda_profile_v1',JSON.stringify(p));toast('تم حفظ إعداد الخصوصية على هذا الجهاز');shade.querySelector('#mawaddaMenuDetail')?.remove();renderProfile()};
+   content.append(save);showDetail('الإعدادات والخصوصية',content);
+  };
+  menuButtons[1].onclick=async()=>{
+   const content=document.createElement('div');content.append(paragraph('جارٍ التحقق من حالة الحساب…'));showDetail('حالة الحساب',content);
+   try{
+    if(!window.supabase||!window.SUPABASE_URL||!window.SUPABASE_PUBLISHABLE_KEY)throw Error('خدمة الحساب غير متاحة');
+    const client=window.supabase.createClient(window.SUPABASE_URL,window.SUPABASE_PUBLISHABLE_KEY);
+    const {data,error}=await client.auth.getUser();if(error)throw error;
+    content.replaceChildren();
+    if(!data.user){content.append(paragraph('غير مسجل الدخول'));return}
+    content.append(paragraph('حالة الحساب: نشط ومسجل الدخول'),paragraph('البريد الإلكتروني: '+(data.user.email||'غير متوفر')),paragraph('تاريخ إنشاء الحساب: '+new Date(data.user.created_at).toLocaleDateString('ar-IQ')));
+   }catch(e){content.replaceChildren(paragraph('تعذر التحقق من حالة الحساب: '+e.message))}
+  };
+  menuButtons[2].onclick=()=>{const content=document.createElement('div');content.append(paragraph('يمكنك إدارة أذونات إشعارات مَوَدَّة من إعدادات المتصفح أو الهاتف.'));showDetail('الإشعارات',content)};
+  menuButtons[3].onclick=()=>{
+   const content=document.createElement('div');
+   content.append(paragraph('مَوَدَّة — شبكة الأسرة والطفل الشيعي'),paragraph('منصة تواصل اجتماعي تهدف إلى بناء مجتمع مترابط، وتعزيز القيم الأسرية والتربوية، وتوفير مساحة للتواصل وتبادل المعرفة والمحتوى النافع باحترام وخصوصية.'),paragraph('المؤسس: الأخصائي النفسي حيدر علي.'),paragraph('رؤيتنا: أن تكون مَوَدَّة مساحة رقمية آمنة تجمع أفراد الأسرة والمجتمع على المحبة والتعاون والمعرفة.'));
+   showDetail('حول مَوَدَّة',content);
+  };
   shade.querySelector('.profile-side-close').onclick=()=>shade.remove();
   shade.onclick=e=>{if(e.target===shade)shade.remove()};
   $('profileLogout').onclick=async()=>{try{if(window.supabase&&window.SUPABASE_URL&&window.SUPABASE_PUBLISHABLE_KEY){const client=window.supabase.createClient(window.SUPABASE_URL,window.SUPABASE_PUBLISHABLE_KEY);await client.auth.signOut()}}catch(e){} location.reload()};
