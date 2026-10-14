@@ -1099,7 +1099,7 @@ if(!window.matchMedia('(prefers-reduced-motion: reduce)').matches)setInterval(()
  const $=id=>document.getElementById(id);
  const gate=$('authGate'),login=$('authLogin'),signup=$('authSignup'),otp=$('authOtp');
  const notify=message=>{try{toast(message)}catch(e){alert(message)}};
- const validEmail=value=>/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(value);
+ const validEmail=value=>/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
  const show=panel=>{login.hidden=panel!=='login';signup.hidden=panel!=='signup';otp.hidden=true};
  const addPassword=(panel,id,autocomplete)=>{
    let field=$(id);if(!field){field=document.createElement('input');field.id=id;field.type='password';field.className='auth-input';field.autocomplete=autocomplete;field.placeholder='كلمة المرور (6 أحرف على الأقل)';panel.insertBefore(field,panel.querySelector('.auth-primary'))}return field;
