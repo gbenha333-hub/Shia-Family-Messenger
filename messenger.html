@@ -629,6 +629,11 @@ body:has(#overlay:not([hidden])) .dock{display:none!important}
  outline:0!important;box-shadow:none!important;background:transparent!important
 }
 .auth-panel{overflow:visible!important}
+</style><style>
+/* V50 — force mobile auth switch hit targets */
+#showSignup,#showLogin,#authBack{display:block!important;position:relative!important;z-index:99999!important;pointer-events:auto!important;touch-action:manipulation!important;min-height:48px!important;line-height:32px!important}
+#authGate,#authGate *{pointer-events:auto}
+#authGate .auth-wave{pointer-events:none!important}
 </style></head><body>
 <div id="authGate" class="auth-gate" dir="rtl">
   <section class="auth-card" aria-label="تسجيل الدخول إلى مَوَدَّة">
@@ -1116,7 +1121,7 @@ if(!window.matchMedia('(prefers-reduced-motion: reduce)').matches)setInterval(()
    const {data:{session}}=await sb.auth.getSession();
    if(session?.user){gate.hidden=true;await applyServerRole(session.user)} else gate.hidden=false;
  }
- const tap=(id,fn)=>{const el=document.getElementById(id);if(!el)return;el.onclick=(e)=>{e.preventDefault();e.stopPropagation();fn(e)}};
+ const tap=(id,fn)=>{const el=document.getElementById(id);if(!el)return;let fired=false;const go=e=>{if(e){e.preventDefault();e.stopPropagation()}if(fired)return;fired=true;setTimeout(()=>fired=false,250);fn(e)};el.addEventListener('pointerup',go,{passive:false});el.addEventListener('touchend',go,{passive:false});el.addEventListener('click',go,{passive:false})};
  tap('showSignup',()=>show('signup'));
  tap('showLogin',()=>show('login'));
  tap('authBack',()=>show('login'));
