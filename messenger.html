@@ -665,7 +665,7 @@ body:has(#overlay:not([hidden])) .dock{display:none!important}
         <input id="loginEmail" type="email" autocomplete="email" placeholder="name@example.com" aria-label="البريد الإلكتروني">
       </label>
       <button id="loginContinue" class="auth-primary" type="button">متابعة</button>
-      <button id="showSignup" class="auth-link" type="button">ليس لديك حساب؟ <b>إنشاء حساب</b></button>
+      <button id="showSignup" class="auth-link" type="button" onclick="window.mawaddaAuthShow && window.mawaddaAuthShow(&quot;signup&quot;)">ليس لديك حساب؟ <b>إنشاء حساب</b></button>
     </div>
 
     <div id="authSignup" class="auth-panel" hidden>
@@ -681,7 +681,7 @@ body:has(#overlay:not([hidden])) .dock{display:none!important}
         <option value="">الجنس</option><option value="female">أنثى</option><option value="male">ذكر</option>
       </select>
       <button id="signupContinue" class="auth-primary" type="button">إنشاء الحساب</button>
-      <button id="showLogin" class="auth-link" type="button">لديك حساب؟ <b>تسجيل الدخول</b></button>
+      <button id="showLogin" class="auth-link" type="button" onclick="window.mawaddaAuthShow && window.mawaddaAuthShow(&quot;login&quot;)">لديك حساب؟ <b>تسجيل الدخول</b></button>
     </div>
 
     <div id="authOtp" class="auth-panel" hidden>
@@ -692,7 +692,7 @@ body:has(#overlay:not([hidden])) .dock{display:none!important}
         <input inputmode="numeric" maxlength="1"><input inputmode="numeric" maxlength="1"><input inputmode="numeric" maxlength="1">
       </div>
       <button id="verifyOtp" class="auth-primary" type="button">دخول إلى مَوَدَّة</button>
-      <button id="authBack" class="auth-link" type="button">رجوع</button>
+      <button id="authBack" class="auth-link" type="button" onclick="window.mawaddaAuthShow && window.mawaddaAuthShow(&quot;login&quot;)">رجوع</button>
       <small>رمز تحقق حقيقي يُرسل إلى بريدك الإلكتروني.</small>
     </div>
     <div class="auth-wave auth-wave-bottom"></div>
@@ -1177,4 +1177,18 @@ if(!window.matchMedia('(prefers-reduced-motion: reduce)').matches)setInterval(()
  window.addEventListener('load',()=>{setTimeout(async()=>{try{await ensureProfile();await loadRealPosts();socialSb?.channel('mawadda-feed').on('postgres_changes',{event:'*',schema:'public',table:'posts'},()=>loadRealPosts()).subscribe()}catch(e){console.error(e)}},400)});
 })();
 ;
+</script><script>
+(function(){
+ window.mawaddaAuthShow=function(panel){
+  var l=document.getElementById('authLogin'),s=document.getElementById('authSignup'),o=document.getElementById('authOtp');
+  if(!l||!s||!o)return;
+  l.hidden=panel!=='login';s.hidden=panel!=='signup';o.hidden=panel!=='otp';
+  l.style.display=panel==='login'?'block':'none';s.style.display=panel==='signup'?'block':'none';o.style.display=panel==='otp'?'block':'none';
+ };
+ document.addEventListener('DOMContentLoaded',function(){
+  [['showSignup','signup'],['showLogin','login'],['authBack','login']].forEach(function(x){
+   var el=document.getElementById(x[0]);if(el)el.addEventListener('click',function(e){e.preventDefault();window.mawaddaAuthShow(x[1]);},true);
+  });
+ });
+})();
 </script></body></html>
