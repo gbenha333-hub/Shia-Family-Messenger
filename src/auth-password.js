@@ -1,43 +1,9 @@
-/* Mawadda isolated email/password auth override */
-(() => {
-  const $ = id => document.getElementById(id);
-  const gate=$('authGate'), login=$('authLogin'), signup=$('authSignup'), otp=$('authOtp');
-  if(!gate||!login||!signup||!window.supabase||!window.SUPABASE_URL||!window.SUPABASE_PUBLISHABLE_KEY)return;
-  const sb=window.supabase.createClient(window.SUPABASE_URL,window.SUPABASE_PUBLISHABLE_KEY);
-  const validEmail=v=>/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test((v||'').trim());
-  const notify=s=>typeof window.toast==='function'?window.toast(s):alert(s);
-  const ensurePassword=(panel,id,autocomplete)=>{
-    let el=$(id); if(el)return el;
-    el=document.createElement('input');el.id=id;el.className='auth-input';el.type='password';
-    el.autocomplete=autocomplete;el.placeholder='كلمة المرور (6 أحرف على الأقل)';el.setAttribute('aria-label','كلمة المرور');
-    const btn=panel.querySelector('.auth-primary');panel.insertBefore(el,btn);return el;
-  };
-  const loginPass=ensurePassword(login,'loginPassword','current-password');
-  const signupPass=ensurePassword(signup,'signupPassword','new-password');
-  if(otp)otp.hidden=true;
-  const show=p=>{login.hidden=p!=='login';signup.hidden=p!=='signup';if(otp)otp.hidden=true};
-  $('showSignup')?.addEventListener('click',e=>{e.stopImmediatePropagation();show('signup')},true);
-  $('showLogin')?.addEventListener('click',e=>{e.stopImmediatePropagation();show('login')},true);
-  $('loginContinue')?.addEventListener('click',async e=>{
-    e.preventDefault();e.stopImmediatePropagation();
-    const email=$('loginEmail').value.trim(),password=loginPass.value;
-    if(!validEmail(email))return notify('أدخل بريداً إلكترونياً صحيحاً');
-    if(password.length<6)return notify('أدخل كلمة المرور');
-    const {data,error}=await sb.auth.signInWithPassword({email,password});
-    if(error||!data.user)return notify('البريد الإلكتروني أو كلمة المرور غير صحيحة');
-    gate.hidden=true;notify('أهلاً بك في مَوَدَّة');
-  },true);
-  $('signupContinue')?.addEventListener('click',async e=>{
-    e.preventDefault();e.stopImmediatePropagation();
-    const name=$('signupName').value.trim(),email=$('signupEmail').value.trim(),password=signupPass.value;
-    const birth=$('signupBirth').value,gender=$('signupGender').value;
-    if(name.length<2)return notify('اكتب الاسم');
-    if(!validEmail(email))return notify('أدخل بريداً إلكترونياً صحيحاً');
-    if(password.length<6)return notify('كلمة المرور يجب أن تكون 6 أحرف على الأقل');
-    if(!birth||!gender)return notify('أكمل تاريخ الميلاد والجنس');
-    const {data,error}=await sb.auth.signUp({email,password,options:{data:{name,birth,gender}}});
-    if(error)return notify('تعذر إنشاء الحساب: '+error.message);
-    if(data.session){gate.hidden=true;notify('تم إنشاء الحساب والدخول إلى مَوَدَّة');}
-    else notify('تم إنشاء الحساب. إعداد Supabase ما زال يطلب تأكيد البريد؛ سنعطله من إعدادات المشروع.');
-  },true);
-})();
+/* Mawadda production auth */
+(()=>{const $=id=>document.getElementById(id),g=$('authGate'),l=$('authLogin'),s=$('authSignup'),o=$('authOtp');if(!g||!l||!s||!window.supabase)return;const sb=window.supabase.createClient(window.SUPABASE_URL,window.SUPABASE_PUBLISHABLE_KEY),say=x=>typeof toast==='function'?toast(x):alert(x),email=x=>/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(x);
+function pw(p,id,a){let x=$(id);if(!x){x=document.createElement('input');x.id=id;x.className='auth-input';x.type='password';x.autocomplete=a;x.placeholder='كلمة المرور (6 أحرف على الأقل)';p.insertBefore(x,p.querySelector('.auth-primary'))}return x}const lp=pw(l,'loginPassword','current-password'),sp=pw(s,'signupPassword','new-password');if(o)o.hidden=true;const show=x=>{l.hidden=x!=='login';s.hidden=x!=='signup';if(o)o.hidden=true};
+$('showSignup')?.addEventListener('click',e=>{e.stopImmediatePropagation();show('signup')},true);$('showLogin')?.addEventListener('click',e=>{e.stopImmediatePropagation();show('login')},true);
+$('loginContinue')?.addEventListener('click',async e=>{e.preventDefault();e.stopImmediatePropagation();let m=$('loginEmail').value.trim(),p=lp.value;if(!email(m))return say('أدخل بريداً إلكترونياً صحيحاً');if(p.length<6)return say('أدخل كلمة المرور');let{data,error}=await sb.auth.signInWithPassword({email:m,password:p});if(error||!data.user)return say('البريد الإلكتروني أو كلمة المرور غير صحيحة');g.hidden=true;say('أهلاً بك في مَوَدَّة')},true);
+$('signupContinue')?.addEventListener('click',async e=>{e.preventDefault();e.stopImmediatePropagation();let n=$('signupName').value.trim(),m=$('signupEmail').value.trim(),p=sp.value,b=$('signupBirth').value,x=$('signupGender').value;if(n.length<2)return say('اكتب الاسم');if(!email(m))return say('أدخل بريداً إلكترونياً صحيحاً');if(p.length<6)return say('كلمة المرور يجب أن تكون 6 أحرف على الأقل');if(!b||!x)return say('أكمل تاريخ الميلاد والجنس');let{data,error}=await sb.auth.signUp({email:m,password:p,options:{data:{name:n,birth:b,gender:x}}});if(error)return say('تعذر إنشاء الحساب: '+error.message);if(data.session){g.hidden=true;say('تم إنشاء الحساب والدخول إلى مَوَدَّة')}else say('تم إنشاء الحساب')},true);
+function clean(){document.querySelectorAll('.cm-disclaimer,.cm-admin-note,.section-note,.msg-info,.msg-chat-notice').forEach(e=>{/تجريب|معاينة|محلي|هذا الجهاز/.test(e.textContent)&&e.remove()})}new MutationObserver(clean).observe(document.body,{subtree:true,childList:true});clean();
+function logout(){if($('mawaddaLogout'))return;let b=document.createElement('button');b.id='mawaddaLogout';b.type='button';b.textContent='خروج';b.style.cssText='position:fixed;top:14px;left:14px;z-index:1200;border:0;border-radius:18px;padding:10px 15px;background:#fff;color:#167f83;box-shadow:0 4px 18px #0002;font:700 13px inherit';b.onclick=async()=>{await sb.auth.signOut();document.body.classList.remove('mawadda-admin');g.hidden=false;show('login');say('تم تسجيل الخروج')};document.body.appendChild(b)}
+sb.auth.getSession().then(({data})=>{if(data.session){g.hidden=true;logout()}});sb.auth.onAuthStateChange((_e,x)=>x?logout():$('mawaddaLogout')?.remove())})();
