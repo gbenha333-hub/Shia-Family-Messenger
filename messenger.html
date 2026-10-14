@@ -664,7 +664,7 @@ body:has(#overlay:not([hidden])) .dock{display:none!important}
         <span class="email-icon">✉</span>
         <input id="loginEmail" type="email" autocomplete="email" placeholder="name@example.com" aria-label="البريد الإلكتروني">
       </label>
-      <button id="loginContinue" class="auth-primary" type="button">متابعة</button>
+      <button id="loginContinue" class="auth-primary" type="button" onclick="return window.mawaddaLoginSubmit(event)">متابعة</button>
       <button id="showSignup" class="auth-link" type="button" onclick="window.mawaddaAuthShow && window.mawaddaAuthShow(&quot;signup&quot;)">ليس لديك حساب؟ <b>إنشاء حساب</b></button>
     </div>
 
@@ -680,7 +680,7 @@ body:has(#overlay:not([hidden])) .dock{display:none!important}
       <select id="signupGender" class="auth-input" aria-label="الجنس">
         <option value="">الجنس</option><option value="female">أنثى</option><option value="male">ذكر</option>
       </select>
-      <button id="signupContinue" class="auth-primary" type="button">إنشاء الحساب</button>
+      <button id="signupContinue" class="auth-primary" type="button" onclick="return window.mawaddaSignupSubmit(event)">إنشاء الحساب</button>
       <button id="showLogin" class="auth-link" type="button" onclick="window.mawaddaAuthShow && window.mawaddaAuthShow(&quot;login&quot;)">لديك حساب؟ <b>تسجيل الدخول</b></button>
     </div>
 
@@ -691,7 +691,7 @@ body:has(#overlay:not([hidden])) .dock{display:none!important}
         <input inputmode="numeric" maxlength="1"><input inputmode="numeric" maxlength="1"><input inputmode="numeric" maxlength="1">
         <input inputmode="numeric" maxlength="1"><input inputmode="numeric" maxlength="1"><input inputmode="numeric" maxlength="1">
       </div>
-      <button id="verifyOtp" class="auth-primary" type="button">دخول إلى مَوَدَّة</button>
+      <button id="verifyOtp" class="auth-primary" type="button" onclick="return window.mawaddaVerifySubmit(event)">دخول إلى مَوَدَّة</button>
       <button id="authBack" class="auth-link" type="button" onclick="window.mawaddaAuthShow && window.mawaddaAuthShow(&quot;login&quot;)">رجوع</button>
       <small>رمز تحقق حقيقي يُرسل إلى بريدك الإلكتروني.</small>
     </div>
@@ -704,16 +704,16 @@ body:has(#overlay:not([hidden])) .dock{display:none!important}
  let pending='', sb=null, busy=false;
  const show=p=>{['authLogin','authSignup','authOtp'].forEach(id=>{const el=$(id);if(!el)return;const on=(id==='authLogin'&&p==='login')||(id==='authSignup'&&p==='signup')||(id==='authOtp'&&p==='otp');el.hidden=!on;el.style.display=on?'block':'none'})};
  window.mawaddaAuthShow=show;
+ window.mawaddaLoginSubmit=async function(e){e?.preventDefault();const btn=$('loginContinue'),email=$('loginEmail').value.trim();if(!valid(email)){note('أدخل بريداً إلكترونياً صحيحاً');return false}if(!client()){note('تعذر الاتصال بخدمة الدخول');return false}btn.disabled=true;btn.textContent='جاري الإرسال...';pending=email;try{const {error}=await sb.auth.signInWithOtp({email,options:{shouldCreateUser:false}});if(error)throw error;show('otp');note('تم إرسال رمز التحقق إلى بريدك')}catch(x){note('تعذر إرسال الرمز: '+x.message)}finally{btn.disabled=false;btn.textContent='متابعة'}return false};
+ window.mawaddaSignupSubmit=async function(e){e?.preventDefault();const btn=$('signupContinue'),name=$('signupName').value.trim(),email=$('signupEmail').value.trim(),birth=$('signupBirth').value,gender=$('signupGender').value;if(name.length<2){note('اكتب الاسم');return false}if(!valid(email)){note('أدخل بريداً إلكترونياً صحيحاً');return false}if(!birth||!gender){note('أكمل تاريخ الميلاد والجنس');return false}if(!client()){note('تعذر الاتصال بخدمة التسجيل');return false}btn.disabled=true;btn.textContent='جاري إنشاء الحساب...';pending=email;try{const {error}=await sb.auth.signInWithOtp({email,options:{shouldCreateUser:true,data:{name,birth,gender}}});if(error)throw error;show('otp');note('تم إرسال رمز التحقق إلى بريدك')}catch(x){note('تعذر إنشاء الحساب: '+x.message)}finally{btn.disabled=false;btn.textContent='إنشاء الحساب'}return false};
+ window.mawaddaVerifySubmit=async function(e){e?.preventDefault();const btn=$('verifyOtp'),boxes=[...document.querySelectorAll('.otp-row input')],token=boxes.map(x=>x.value).join('');if(token.length!==6){note('أدخل رمز التحقق كاملاً');return false}if(!pending||!client()){note('أعد طلب رمز التحقق');return false}btn.disabled=true;btn.textContent='جاري التحقق...';try{const {data,error}=await sb.auth.verifyOtp({email:pending,token,type:'email'});if(error||!data.user)throw error||new Error('رمز غير صحيح');await role(data.user);$('authGate').hidden=true;note('أهلاً بك في مَوَدَّة')}catch(x){note('رمز التحقق غير صحيح أو منتهي')}finally{btn.disabled=false;btn.textContent='دخول إلى مَوَدَّة'}return false};
  const note=m=>window.toast?window.toast(m):alert(m);
  const client=()=>sb||(sb=(window.supabase&&window.SUPABASE_URL&&window.SUPABASE_PUBLISHABLE_KEY)?window.supabase.createClient(window.SUPABASE_URL,window.SUPABASE_PUBLISHABLE_KEY):null);
  async function role(user){document.body.classList.remove('mawadda-admin');if(!user||!client())return;const {data}=await sb.from('app_roles').select('role').eq('user_id',user.id).maybeSingle();document.body.classList.toggle('mawadda-admin',data?.role==='owner'||data?.role==='admin')}
  function bind(id,fn){const el=$(id);if(!el)return;el.onclick=async e=>{e.preventDefault();e.stopPropagation();if(busy)return;await fn(el)}}
  document.addEventListener('DOMContentLoaded',async()=>{
   bind('showSignup',()=>show('signup'));bind('showLogin',()=>show('login'));bind('authBack',()=>show('login'));
-  bind('loginContinue',async btn=>{const email=$('loginEmail').value.trim();if(!valid(email))return note('أدخل بريداً إلكترونياً صحيحاً');if(!client())return note('تعذر الاتصال بخدمة الدخول');busy=true;btn.disabled=true;btn.textContent='جاري الإرسال...';pending=email;const {error}=await sb.auth.signInWithOtp({email,options:{shouldCreateUser:false}});busy=false;btn.disabled=false;btn.textContent='متابعة';if(error)return note(error.message.includes('Signups not allowed')?'الحساب غير موجود':'تعذر إرسال الرمز: '+error.message);show('otp');note('تم إرسال رمز التحقق إلى بريدك')});
-  bind('signupContinue',async btn=>{const name=$('signupName').value.trim(),email=$('signupEmail').value.trim(),birth=$('signupBirth').value,gender=$('signupGender').value;if(name.length<2)return note('اكتب الاسم');if(!valid(email))return note('أدخل بريداً إلكترونياً صحيحاً');if(!birth||!gender)return note('أكمل تاريخ الميلاد والجنس');if(!client())return note('تعذر الاتصال بخدمة التسجيل');busy=true;btn.disabled=true;btn.textContent='جاري إنشاء الحساب...';pending=email;const {error}=await sb.auth.signInWithOtp({email,options:{shouldCreateUser:true,data:{name,birth,gender}}});busy=false;btn.disabled=false;btn.textContent='إنشاء الحساب';if(error)return note('تعذر إنشاء الحساب: '+error.message);show('otp');note('تم إرسال رمز التحقق إلى بريدك')});
   const boxes=[...document.querySelectorAll('.otp-row input')];boxes.forEach((b,i)=>{b.oninput=()=>{b.value=b.value.replace(/\D/g,'').slice(0,1);if(b.value)boxes[i+1]?.focus()};b.onkeydown=e=>{if(e.key==='Backspace'&&!b.value)boxes[i-1]?.focus()}});
-  bind('verifyOtp',async btn=>{const token=boxes.map(x=>x.value).join('');if(token.length!==6)return note('أدخل رمز التحقق كاملاً');if(!pending||!client())return note('أعد طلب رمز التحقق');busy=true;btn.disabled=true;btn.textContent='جاري التحقق...';const {data,error}=await sb.auth.verifyOtp({email:pending,token,type:'email'});busy=false;btn.disabled=false;btn.textContent='دخول إلى مَوَدَّة';if(error||!data.user)return note('رمز التحقق غير صحيح أو منتهي');await role(data.user);$('authGate').hidden=true;note('أهلاً بك في مَوَدَّة')});
   if(client()){const {data:{session}}=await sb.auth.getSession();if(session?.user){await role(session.user);$('authGate').hidden=true}else $('authGate').hidden=false;sb.auth.onAuthStateChange((_e,s)=>{if(s?.user)role(s.user)})}
  });
 })();
