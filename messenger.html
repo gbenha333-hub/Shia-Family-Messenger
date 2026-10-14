@@ -672,7 +672,7 @@ const rooms=[['♡','الأسرة والتربية','حوارات وتجارب �
 function navigateSection(tab){
  document.body.classList.toggle('section-mode',tab!=='الرئيسية');
  document.body.classList.toggle('profile-mode',tab==='حسابي');
-if(typeof cmStopAudio==='function')cmStopAudio();currentSection=tab;document.body.classList.toggle('section-mode',tab!=='الرئيسية');sectionView.hidden=tab==='الرئيسية';document.querySelectorAll('.dock [data-tab]').forEach(b=>b.classList.toggle('active',b.dataset.tab===tab));if(tab==='الرئيسية'){sectionView.replaceChildren()}else if(tab==='المجتمع')renderCommunity();else if(tab==='ريلز'){sectionView.replaceChildren();openReels()}else if(tab==='حسابي')renderProfile();window.scrollTo({top:0,behavior:'smooth'})}
+if(typeof cmStopAudio==='function')cmStopAudio();currentSection=tab;document.body.classList.toggle('section-mode',tab!=='الرئيسية');sectionView.hidden=tab==='الرئيسية';document.querySelectorAll('.dock [data-tab]').forEach(b=>b.classList.toggle('active',b.dataset.tab===tab));if(tab==='الرئيسية'){sectionView.replaceChildren()}else if(tab==='المجتمع')renderCommunity();else if(tab==='ريلز'){sectionView.replaceChildren();openReels()}else if(tab==='حسابي')renderProfile();else if(tab==='الرسائل')renderMessages();window.scrollTo({top:0,behavior:'smooth'})}
 const mawaddaIcons={"quran": "<path d=\"M12 5c-2.8-1.8-5.8-2-9-1v15c3.2-1 6.2-.8 9 1 2.8-1.8 5.8-2 9-1V4c-3.2-1-6.2-.8-9 1Z\"/><path d=\"M12 5v15M7 9h2m6 0h2M7 13h2m6 0h2\"/>", "women": "<path d=\"M5 21h14l-2-7c-1-3-1-9-5-9s-4 6-5 9l-2 7Z\"/><path d=\"M9 11q3 3 6 0M9 17h6\"/><circle cx=\"12\" cy=\"8\" r=\"1.2\"/>", "men": "<path d=\"M8 6q4-4 8 0v2H8V6Z\"/><circle cx=\"12\" cy=\"10\" r=\"3\"/><path d=\"M4 21v-2a8 8 0 0 1 16 0v2M8 18v3m8-3v3\"/>", "students": "<path d=\"m2 9 10-5 10 5-10 5L2 9Zm4 2v6c3 3 9 3 12 0v-6M22 9v8\"/>", "kids": "<circle cx=\"12\" cy=\"12\" r=\"9\"/><path d=\"M8.5 10h.01M15.5 10h.01M8 14c2.2 3 5.8 3 8 0\"/>", "lessons": "<rect x=\"3\" y=\"5\" width=\"18\" height=\"14\" rx=\"2\"/><path d=\"M8 10h8m-8 4h5M12 19v3\"/>", "fiqh": "<path d=\"M12 3v18M5 7h14M5 7 2 14h6L5 7Zm14 0-3 7h6l-3-7ZM8 21h8\"/>", "aqeedah": "<path d=\"m12 2 2.5 7.5L22 12l-7.5 2.5L12 22l-2.5-7.5L2 12l7.5-2.5L12 2Z\"/>", "akhlaq": "<path d=\"M20 4C8 4 4 10 4 17c7 1 16-2 16-13ZM4 21c2-5 6-9 12-12\"/>", "tafsir": "<path d=\"M12 5c-3-2-6-2-9-1v15c3-1 6-1 9 1 3-2 6-2 9-1V4c-3-1-6-1-9 1ZM12 5v15\"/><path d=\"m17 7 .6 1.4L19 9l-1.4.6L17 11l-.6-1.4L15 9l1.4-.6L17 7Z\"/>", "library": "<path d=\"M4 4h4v16H4zM10 4h4v16h-4zM16 6l4-1 3 14-4 1z\"/>", "qa": "<circle cx=\"12\" cy=\"12\" r=\"9\"/><path d=\"M9.5 9a2.7 2.7 0 1 1 4.2 2.2c-1.2.8-1.7 1.3-1.7 2.8M12 17h.01\"/>", "discussion": "<path d=\"M20 11a7 7 0 0 1-7 7H8l-4 3v-6a7 7 0 0 1 0-8 9 9 0 0 1 16 4ZM8 11h8M8 14h5\"/>"};function mawaddaIcon(id){return '<svg class="mawadda-line-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+(mawaddaIcons[id]||mawaddaIcons.aqeedah)+'</svg>'}
 const communitySpaces=[{id:'quran',icon:'📖',title:'القرآن الكريم التفاعلي',desc:'مصحف وتلاوة صوتية وتتبّع الآيات',type:'عام'},{id:'women',icon:'🌷',title:'الحوزة النسائية',desc:'دروس ونقاشات خاصة بالعضوات',type:'مغلق'},{id:'men',icon:'📚',title:'الحوزة الرجالية',desc:'دروس ونقاشات خاصة بالأعضاء',type:'مغلق'},{id:'students',icon:'🎓',title:'مجتمع طلبة الحوزة',desc:'حلقات علمية ومكتبة ونقاشات',type:'مغلق'},{id:'kids',icon:'🌱',title:'عالم الطفل',desc:'قصص وتعليم وأنشطة بإشراف الأهل',type:'عام'}];
 const cmKey='mawadda_community_demo_v1';
@@ -738,13 +738,7 @@ function cmAdminPanel(tab){
  document.getElementById('cmLeaveAdmin').onclick=()=>{localStorage.removeItem(cmAdminKey);cmAdminPanel()};
  }
 }
-function cmDecide(id,decision){
- if(!cmIsAdmin())return;
- const st=cmRead(),req=(st.requests||[]).find(r=>r.id===id);if(!req||req.status!=='pending')return;
- req.status=decision;req.reviewed=new Date().toLocaleString('ar-IQ');
- if(!req.sample)st['membership_'+req.space]=decision==='approved'?'approved':'rejected';
- cmSave(st);cmAdminPanel();
-}
+async function cmDecide(id,decision){if(!cmIsAdmin())return;const {error}=await socialSb.rpc('review_join_request',{req_id:Number(id),new_status:decision});if(error)return toast('تعذر تحديث الطلب');toast(decision==='approved'?'تم قبول العضو':'تم رفض الطلب');cmAdminPanel('requests')}
 
 const cmVerses=['بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ','الْحَمْدُ لِلَّهِ رَبِّ الْعَالَمِينَ','الرَّحْمَٰنِ الرَّحِيمِ','مَالِكِ يَوْمِ الدِّينِ','إِيَّاكَ نَعْبُدُ وَإِيَّاكَ نَسْتَعِينُ','اهْدِنَا الصِّرَاطَ الْمُسْتَقِيمَ','صِرَاطَ الَّذِينَ أَنْعَمْتَ عَلَيْهِمْ غَيْرِ الْمَغْضُوبِ عَلَيْهِمْ وَلَا الضَّالِّينَ'];
 let cmAudio=null;
@@ -890,54 +884,18 @@ async function realConversations(){const u=await socialUser();if(!u)return[];con
 async function startRealChat(other){const {data,error}=await socialSb.rpc('start_conversation',{other_user:other});if(error)return toast('تعذر فتح المحادثة');realMsgActive=data;await openRealChat()}
 async function renderRealMessages(){const cs=await realConversations();sectionView.innerHTML='<section class="msg-app"><div class="msg-titlebar"><div><span class="msg-eyebrow">مَوَدَّة • تواصل</span><h1>الرسائل</h1></div><button id="msgNew" class="msg-iconbtn">✎</button></div><div id="msgList" class="msg-list"></div></section>';const list=$('msgList');list.innerHTML=cs.map(x=>'<button class="msg-contact" data-cid="'+x.conversation_id+'"><div class="msg-avatar">✦</div><span class="msg-contact-info"><strong>'+cmEscape(x.profiles?.display_name||'عضو مَوَدَّة')+'</strong><small>محادثة خاصة</small></span></button>').join('')||'<div class="msg-empty">لا توجد محادثات بعد.</div>';list.querySelectorAll('[data-cid]').forEach(x=>x.onclick=()=>{realMsgActive=Number(x.dataset.cid);openRealChat()});$('msgNew').onclick=async()=>{const ps=await realContacts();list.innerHTML=ps.map(p=>'<button class="msg-contact" data-user="'+p.id+'"><div class="msg-avatar">✦</div><span class="msg-contact-info"><strong>'+cmEscape(p.display_name||'عضو')+'</strong><small>ابدأ محادثة</small></span></button>').join('')||'<div class="msg-empty">لا يوجد أعضاء آخرون حالياً.</div>';list.querySelectorAll('[data-user]').forEach(x=>x.onclick=()=>startRealChat(x.dataset.user))}}
 async function openRealChat(){const u=await socialUser();if(!u||!realMsgActive)return;const {data}=await socialSb.from('messages').select('id,sender_id,body,created_at').eq('conversation_id',realMsgActive).order('created_at');sectionView.innerHTML='<section class="msg-chat"><div class="msg-chat-head"><button id="msgBack" class="msg-back">→</button><div class="msg-chat-person"><strong>محادثة مَوَدَّة</strong><small>مراسلة حقيقية</small></div></div><div id="msgTimeline" class="msg-timeline"></div><div class="msg-compose"><input id="msgDraft" maxlength="1000" placeholder="اكتب رسالة..."><button id="msgSend" class="msg-send">➤</button></div></section>';const log=$('msgTimeline');(data||[]).forEach(x=>{const d=document.createElement('div');d.className='msg-message '+(x.sender_id===u.id?'mine':'');d.textContent=x.body;log.append(d)});log.scrollTop=log.scrollHeight;$('msgBack').onclick=renderRealMessages;const send=async()=>{const v=$('msgDraft').value.trim();if(!v)return;const {error}=await socialSb.from('messages').insert({conversation_id:realMsgActive,sender_id:u.id,body:v});if(error)return toast('تعذر إرسال الرسالة');openRealChat()};$('msgSend').onclick=send;$('msgDraft').onkeydown=e=>{if(e.key==='Enter')send()}}
-const msgDemoContacts=[
-{id:'support',name:'فريق مَوَدَّة',subtitle:'المساعدة والدعم',initial:'✦',gradient:'linear-gradient(135deg,#0c7b82,#55c5ba)',verified:true},
-{id:'family',name:'مجموعة الأسرة',subtitle:'مجموعة تجريبية',initial:'♡',gradient:'linear-gradient(135deg,#c99b9e,#cbb9dd)'},
-{id:'study',name:'حلقة المعرفة',subtitle:'مجموعة تجريبية',initial:'✧',gradient:'linear-gradient(135deg,#a49a80,#83b5a6)'}
-];
-let msgActive='support',msgFilter='all',msgSearch='';
-function msgStore(){try{return JSON.parse(localStorage.getItem('mawadda_messages_v19')||'{}')}catch{return {}}}
-function msgSave(o){localStorage.setItem('mawadda_messages_v19',JSON.stringify(o))}
-function msgItems(id){const store=msgStore();return store[id]||[]}
-function msgTime(ts){return new Date(ts).toLocaleTimeString('ar-IQ',{hour:'numeric',minute:'2-digit'})}
-function msgAvatar(c){return '<div class="msg-avatar" style="background:'+c.gradient+'">'+c.initial+'</div>'}
-function renderMessages(){
- const store=msgStore();
- sectionView.innerHTML=`<section class="msg-app">
- <div class="msg-titlebar"><div><span class="msg-eyebrow">مَوَدَّة • تواصل</span><h1>الرسائل <span class="msg-title-count">${Object.values(store).reduce((n,a)=>n+a.length,0)}</span></h1></div><button id="msgNew" class="msg-iconbtn" aria-label="رسالة جديدة">✎</button></div>
- <div class="msg-searchbox"><span>⌕</span><input id="msgSearch" type="search" placeholder="ابحث عن محادثة..." value="${cmEscape(msgSearch)}"></div>
- <div class="msg-filters"><button data-filter="all" class="${msgFilter==='all'?'selected':''}">الكل</button><button data-filter="unread" class="${msgFilter==='unread'?'selected':''}">غير المقروءة</button><button data-filter="groups" class="${msgFilter==='groups'?'selected':''}">المجموعات</button></div>
- <div id="msgList" class="msg-list"></div>
- <div class="msg-info">واجهة تجريبية — الرسائل محفوظة على هذا الجهاز فقط.</div>
- </section>`;
- document.getElementById('msgSearch').oninput=e=>{msgSearch=e.target.value;msgRenderList()};
- document.querySelectorAll('[data-filter]').forEach(x=>x.onclick=()=>{msgFilter=x.dataset.filter;renderMessages()});
- document.getElementById('msgNew').onclick=()=>{msgActive='support';msgOpenChat()};
- msgRenderList();
+let msgActive=null,msgFilter='all',msgSearch='',msgContacts=[];
+function msgTime(ts){return ts?new Date(ts).toLocaleTimeString('ar-IQ',{hour:'numeric',minute:'2-digit'}):''}
+async function renderMessages(){
+ sectionView.innerHTML='<section class="msg-app"><div class="msg-titlebar"><div><span class="msg-eyebrow">مَوَدَّة • تواصل</span><h1>الرسائل</h1></div><button id="msgNew" class="msg-iconbtn">✎</button></div><div class="msg-searchbox"><span>⌕</span><input id="msgSearch" placeholder="ابحث عن عضو..."></div><div id="msgList" class="msg-list"></div><div class="msg-info">🔒 الرسائل خاصة بأطراف المحادثة ومحفوظة على الخادم.</div></section>';
+ const {data,error}=await socialSb.rpc('my_conversations');if(error){console.error(error);toast('تعذر تحميل الرسائل');return}msgContacts=data||[];msgRenderList();
+ $('msgSearch').oninput=e=>{msgSearch=e.target.value;msgRenderList()};$('msgNew').onclick=msgNewConversation;
 }
-function msgRenderList(){
- const list=document.getElementById('msgList');if(!list)return;
- const contacts=msgDemoContacts.filter(c=>(msgFilter!=='groups'||c.id!=='support')&&(msgFilter!=='unread'||!msgItems(c.id).length)&&(c.name.includes(msgSearch)||c.subtitle.includes(msgSearch)));
- list.innerHTML=contacts.map(c=>{const items=msgItems(c.id),last=items.at(-1);return `<button class="msg-contact" data-chat="${c.id}">${msgAvatar(c)}<span class="msg-contact-info"><strong>${c.name} ${c.verified?'<span class="msg-verified">✦</span>':''}</strong><small>${last?cmEscape(last.text):c.subtitle}</small></span><span class="msg-contact-side"><time>${last?msgTime(last.time):''}</time>${items.length?'<span class="msg-tick">✓✓</span>':''}</span></button>`}).join('')||'<div class="msg-empty">ماكو محادثات مطابقة للبحث.</div>';
- list.querySelectorAll('[data-chat]').forEach(x=>x.onclick=()=>{msgActive=x.dataset.chat;msgOpenChat()});
-}
-function msgOpenChat(){
- const c=msgDemoContacts.find(x=>x.id===msgActive)||msgDemoContacts[0],items=msgItems(c.id);
- sectionView.innerHTML=`<section class="msg-chat">
- <div class="msg-chat-head"><button id="msgBack" class="msg-back" aria-label="رجوع">→</button>${msgAvatar(c)}<div class="msg-chat-person"><strong>${c.name}</strong><small>${c.subtitle}</small></div><button id="msgMore" class="msg-iconbtn" aria-label="تفاصيل">⋯</button></div>
- <div id="msgTimeline" class="msg-timeline" role="log"><div class="msg-day">اليوم</div><div class="msg-chat-notice">🔒 محادثة تجريبية محلية، ليست مراسلة فعلية.</div></div>
- <div class="msg-compose"><button id="msgAttach" class="msg-attach" aria-label="إرفاق">＋</button><input id="msgDraft" maxlength="1000" placeholder="اكتب رسالة..." autocomplete="off"><button id="msgSend" class="msg-send" aria-label="إرسال">➤</button></div></section>`;
- const log=document.getElementById('msgTimeline');
- if(!items.length){const hint=document.createElement('div');hint.className='msg-chat-welcome';hint.textContent='ابدأ محادثة تجريبية مع '+c.name;log.append(hint)}
- items.forEach(m=>{const bubble=document.createElement('div');bubble.className='msg-message mine';const txt=document.createElement('span');txt.textContent=m.text;const time=document.createElement('time');time.textContent=msgTime(m.time)+' ✓✓';bubble.append(txt,time);log.append(bubble)});
- log.scrollTop=log.scrollHeight;
- document.getElementById('msgBack').onclick=renderMessages;
- document.getElementById('msgMore').onclick=()=>toast('هذه محادثة محلية للمعاينة فقط');
- document.getElementById('msgAttach').onclick=()=>toast('المرفقات تحتاج ربط التخزين والحسابات');
- const send=()=>{const input=document.getElementById('msgDraft'),v=input.value.trim();if(!v)return;const store=msgStore();store[c.id]=[...(store[c.id]||[]),{text:v,time:Date.now()}].slice(-100);msgSave(store);msgOpenChat();document.getElementById('msgDraft').focus()};
- document.getElementById('msgSend').onclick=send;
- document.getElementById('msgDraft').onkeydown=e=>{if(e.key==='Enter')send()};
-}
+function msgRenderList(){const list=$('msgList');if(!list)return;const arr=msgContacts.filter(x=>(x.other_name||'').includes(msgSearch));list.innerHTML=arr.map(x=>'<button class="msg-contact" data-chat="'+x.conversation_id+'"><div class="msg-avatar">✦</div><span class="msg-contact-info"><strong>'+cmEscape(x.other_name)+'</strong><small>'+cmEscape(x.last_body||'ابدأ المحادثة')+'</small></span><span class="msg-contact-side"><time>'+msgTime(x.last_at)+'</time></span></button>').join('')||'<div class="msg-empty">ماكو محادثات حالياً. اضغط ✎ لبدء رسالة.</div>';list.querySelectorAll('[data-chat]').forEach(x=>x.onclick=()=>msgOpenChat(x.dataset.chat))}
+async function msgNewConversation(){const term=prompt('اكتب اسم العضو للبحث')||'';const {data,error}=await socialSb.rpc('search_members',{term});if(error||!data?.length)return toast('ما لكيت عضو بهذا الاسم');const choices=data.map((x,i)=>(i+1)+'- '+x.display_name).join('\n');const n=Number(prompt('اختر رقم العضو:\n'+choices));const member=data[n-1];if(!member)return;const {data:cid,error:e}=await socialSb.rpc('start_conversation',{other_user:member.id});if(e)return toast('تعذر بدء المحادثة');msgOpenChat(cid)}
+async function msgOpenChat(cid){msgActive=cid;const contact=msgContacts.find(x=>x.conversation_id===cid);sectionView.innerHTML='<section class="msg-chat"><div class="msg-chat-head"><button id="msgBack" class="msg-back">→</button><div class="msg-avatar">✦</div><div class="msg-chat-person"><strong>'+cmEscape(contact?.other_name||'محادثة')+'</strong><small>محادثة خاصة</small></div></div><div id="msgTimeline" class="msg-timeline"><div class="msg-day">اليوم</div></div><div class="msg-compose"><input id="msgDraft" maxlength="1000" placeholder="اكتب رسالة..." autocomplete="off"><button id="msgSend" class="msg-send">➤</button></div></section>';$('msgBack').onclick=renderMessages;await msgLoad(cid);const send=async()=>{const v=$('msgDraft').value.trim();if(!v)return;const u=await socialUser();const {error}=await socialSb.from('messages').insert({conversation_id:cid,sender_id:u.id,body:v});if(error)return toast('تعذر إرسال الرسالة');$('msgDraft').value='';await msgLoad(cid)};$('msgSend').onclick=send;$('msgDraft').onkeydown=e=>{if(e.key==='Enter')send()}}
+async function msgLoad(cid){const u=await socialUser();const {data,error}=await socialSb.from('messages').select('id,sender_id,body,created_at').eq('conversation_id',cid).order('created_at');if(error)return toast('تعذر تحميل المحادثة');const log=$('msgTimeline');if(!log)return;log.innerHTML='<div class="msg-day">اليوم</div>';(data||[]).forEach(m=>{const b=document.createElement('div');b.className='msg-message '+(m.sender_id===u.id?'mine':'');b.innerHTML='<span>'+cmEscape(m.body||'')+'</span><time>'+msgTime(m.created_at)+'</time>';log.append(b)});log.scrollTop=log.scrollHeight}
+
 function getProfile(){try{return JSON.parse(localStorage.getItem('sila_demo_profile_v1')||'{}')}catch{return {}}}
 function renderProfile(){
 const profile=getProfile(),own=posts.filter(p=>p.author==='أنت'),count=own.length;
