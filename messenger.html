@@ -580,7 +580,32 @@ body:has(#overlay:not([hidden])) .dock{display:none!important}
 .mq-audio span{color:#609b6c!important;font-size:11px!important}
 .mq-meta{color:#799b7e!important}
 @media(max-width:470px){.mq-text{padding:4px 3px 25px!important;font-size:clamp(30px,7.2vw,41px)!important;line-height:2.5!important}.mq-audio{bottom:66px!important}.mq-audio span{flex-basis:100%;text-align:center}}
-</style><script src="config.js"></script><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script></head><body>
+</style><script src="config.js"></script><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><style>
+/* V47 — mobile auth pressure/viewport fix */
+.auth-gate{min-height:100dvh!important;height:100dvh!important;overflow-y:auto!important;align-items:flex-start!important;background:#fff!important}
+.auth-card{width:100%!important;max-width:520px!important;min-height:100dvh!important;padding:clamp(88px,13dvh,132px) 24px calc(52px + env(safe-area-inset-bottom))!important;justify-content:flex-start!important}
+.auth-brand{margin-bottom:clamp(20px,4dvh,34px)!important}
+.auth-brand .auth-logo{width:70px!important;height:70px!important}
+.auth-brand h1{font-size:38px!important;margin:10px 0 4px!important}
+.auth-brand p{font-size:16px!important;margin:0!important}
+.auth-panel{width:100%!important;max-width:430px!important;margin:0 auto!important}
+.auth-panel h2{font-size:32px!important;margin:0 0 8px!important}
+.auth-panel>p{margin:0 0 22px!important;font-size:15px!important}
+.auth-field{min-height:62px!important;margin-bottom:16px!important}
+.auth-primary{min-height:62px!important;margin-top:8px!important;font-size:18px!important}
+.auth-switch{margin-top:20px!important}
+.auth-wave-top{height:165px!important;transform:translateY(-55%)!important}
+.auth-wave-bottom{height:125px!important;transform:translateY(58%)!important}
+@media(max-height:740px){
+ .auth-card{padding-top:64px!important}
+ .auth-brand{margin-bottom:12px!important}
+ .auth-brand .auth-logo{width:58px!important;height:58px!important}
+ .auth-brand h1{font-size:32px!important}
+ .auth-panel h2{font-size:28px!important}
+ .auth-wave-top{height:120px!important}
+ .auth-wave-bottom{display:none!important}
+}
+</style></head><body>
 <div id="authGate" class="auth-gate" dir="rtl">
   <section class="auth-card" aria-label="تسجيل الدخول إلى مَوَدَّة">
     <div class="auth-wave auth-wave-top"></div>
