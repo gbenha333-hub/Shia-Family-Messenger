@@ -580,7 +580,7 @@ body:has(#overlay:not([hidden])) .dock{display:none!important}
 .mq-audio span{color:#609b6c!important;font-size:11px!important}
 .mq-meta{color:#799b7e!important}
 @media(max-width:470px){.mq-text{padding:4px 3px 25px!important;font-size:clamp(30px,7.2vw,41px)!important;line-height:2.5!important}.mq-audio{bottom:66px!important}.mq-audio span{flex-basis:100%;text-align:center}}
-</style></head><body>
+</style><script src="config.js"></script><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script></head><body>
 <div id="authGate" class="auth-gate" dir="rtl">
   <section class="auth-card" aria-label="تسجيل الدخول إلى مَوَدَّة">
     <div class="auth-wave auth-wave-top"></div>
@@ -626,7 +626,7 @@ body:has(#overlay:not([hidden])) .dock{display:none!important}
       </div>
       <button id="verifyOtp" class="auth-primary" type="button">دخول إلى مَوَدَّة</button>
       <button id="authBack" class="auth-link" type="button">رجوع</button>
-      <small>نسخة تجريبية: أي 6 أرقام تفتح التطبيق.</small>
+      <small>رمز تحقق حقيقي يُرسل إلى بريدك الإلكتروني.</small>
     </div>
     <div class="auth-wave auth-wave-bottom"></div>
   </section>
@@ -1081,46 +1081,60 @@ if(!window.matchMedia('(prefers-reduced-motion: reduce)').matches)setInterval(()
  const gate=document.getElementById('authGate');
  const login=document.getElementById('authLogin'), signup=document.getElementById('authSignup'), otp=document.getElementById('authOtp');
  const show=(panel)=>{login.hidden=panel!=='login';signup.hidden=panel!=='signup';otp.hidden=panel!=='otp';};
+ const validEmail=v=>/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim());
+ let pendingAuthEmail='';
+ const sb=(window.supabase&&window.SUPABASE_URL&&window.SUPABASE_PUBLISHABLE_KEY)?window.supabase.createClient(window.SUPABASE_URL,window.SUPABASE_PUBLISHABLE_KEY):null;
+ async function applyServerRole(user){
+   document.body.classList.remove('mawadda-admin');
+   if(!sb||!user)return;
+   const {data,error}=await sb.from('app_roles').select('role').eq('user_id',user.id).maybeSingle();
+   if(error){console.error(error);return}
+   document.body.classList.toggle('mawadda-admin',data?.role==='owner'||data?.role==='admin');
+ }
+ async function boot(){
+   if(!sb){gate.hidden=false;toast('تعذر الاتصال بخدمة تسجيل الدخول');return}
+   const {data:{session}}=await sb.auth.getSession();
+   if(session?.user){gate.hidden=true;await applyServerRole(session.user)} else gate.hidden=false;
+ }
  document.getElementById('showSignup').addEventListener('click',()=>show('signup'));
  document.getElementById('showLogin').addEventListener('click',()=>show('login'));
  document.getElementById('authBack').addEventListener('click',()=>show('login'));
- const validEmail=v=>/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim());
- const OWNER_EMAIL='g.ben.ha333@gmail.com';
- let pendingAuthEmail='';
- const normalizeEmail=v=>String(v||'').trim().toLowerCase();
- document.getElementById('loginContinue').addEventListener('click',()=>{
-   const v=document.getElementById('loginEmail').value;
-   if(!validEmail(v)){toast('أدخل بريداً إلكترونياً صحيحاً');return} pendingAuthEmail=normalizeEmail(v); show('otp');
+ document.getElementById('loginContinue').addEventListener('click',async()=>{
+   const email=document.getElementById('loginEmail').value.trim();
+   if(!validEmail(email)){toast('أدخل بريداً إلكترونياً صحيحاً');return}
+   if(!sb){toast('خدمة تسجيل الدخول غير متاحة');return}
+   pendingAuthEmail=email;
+   const {error}=await sb.auth.signInWithOtp({email,options:{shouldCreateUser:false}});
+   if(error){toast(error.message.includes('Signups not allowed')?'الحساب غير موجود':('تعذر إرسال الرمز: '+error.message));return}
+   show('otp');boxes[0]?.focus();toast('تم إرسال رمز التحقق إلى بريدك');
  });
- document.getElementById('signupContinue').addEventListener('click',()=>{
-   const name=document.getElementById('signupName').value.trim(),email=document.getElementById('signupEmail').value;
+ document.getElementById('signupContinue').addEventListener('click',async()=>{
+   const name=document.getElementById('signupName').value.trim(),email=document.getElementById('signupEmail').value.trim();
    const birth=document.getElementById('signupBirth').value,gender=document.getElementById('signupGender').value;
    if(name.length<2){toast('اكتب الاسم');return}
    if(!validEmail(email)){toast('أدخل بريداً إلكترونياً صحيحاً');return}
    if(!birth||!gender){toast('أكمل تاريخ الميلاد والجنس');return}
-   pendingAuthEmail=normalizeEmail(email); show('otp');
+   if(!sb){toast('خدمة تسجيل الدخول غير متاحة');return}
+   pendingAuthEmail=email;
+   const {error}=await sb.auth.signInWithOtp({email,options:{shouldCreateUser:true,data:{name,birth,gender}}});
+   if(error){toast('تعذر إنشاء الحساب: '+error.message);return}
+   show('otp');boxes[0]?.focus();toast('تم إرسال رمز التحقق إلى بريدك');
  });
  const boxes=[...document.querySelectorAll('.otp-row input')];
  boxes.forEach((box,i)=>{
    box.addEventListener('input',()=>{box.value=box.value.replace(/\D/g,'').slice(0,1);if(box.value&&boxes[i+1])boxes[i+1].focus()});
    box.addEventListener('keydown',e=>{if(e.key==='Backspace'&&!box.value&&boxes[i-1])boxes[i-1].focus()});
  });
- document.getElementById('verifyOtp').addEventListener('click',()=>{
-   if(boxes.map(x=>x.value).join('').length!==6){toast('أدخل رمز التحقق كاملاً');return}
-   try{localStorage.setItem('mawadda_current_email',pendingAuthEmail);localStorage.setItem('mawadda_account_role',pendingAuthEmail===OWNER_EMAIL?'owner':'member')}catch(e){}
-   document.body.classList.toggle('mawadda-admin',pendingAuthEmail===OWNER_EMAIL);
-   gate.hidden=true; toast(pendingAuthEmail===OWNER_EMAIL?'أهلاً بك، تم تفعيل لوحة الإدارة':'أهلاً بك في مَوَدَّة');
+ document.getElementById('verifyOtp').addEventListener('click',async()=>{
+   const token=boxes.map(x=>x.value).join('');
+   if(token.length!==6){toast('أدخل رمز التحقق كاملاً');return}
+   if(!sb||!pendingAuthEmail){toast('أعد طلب رمز التحقق');return}
+   const {data,error}=await sb.auth.verifyOtp({email:pendingAuthEmail,token,type:'email'});
+   if(error||!data.user){toast('رمز التحقق غير صحيح أو منتهي');return}
+   await applyServerRole(data.user);gate.hidden=true;toast(document.body.classList.contains('mawadda-admin')?'أهلاً بك، لوحة الإدارة مفعلة':'أهلاً بك في مَوَدَّة');
  });
-
+ sb?.auth.onAuthStateChange((_event,session)=>{if(session?.user)applyServerRole(session.user);else document.body.classList.remove('mawadda-admin')});
+ boot();
 })();
-
-(function(){
-  const applyAdminVisibility=()=>{
-    let role='';
-    try{role=localStorage.getItem('mawadda_account_role')||''}catch(e){}
-    document.body.classList.toggle('mawadda-admin',role==='owner');
-  };
-  applyAdminVisibility();
-  window.addEventListener('storage',applyAdminVisibility);
-})();
+;
 </script></body></html>
