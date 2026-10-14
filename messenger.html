@@ -634,6 +634,19 @@ body:has(#overlay:not([hidden])) .dock{display:none!important}
 #showSignup,#showLogin,#authBack{display:block!important;position:relative!important;z-index:99999!important;pointer-events:auto!important;touch-action:manipulation!important;min-height:48px!important;line-height:32px!important}
 #authGate,#authGate *{pointer-events:auto}
 #authGate .auth-wave{pointer-events:none!important}
+</style><style>
+/* V51 — Android selection/focus cleanup */
+#loginEmail,#signupEmail,.auth-input{
+ -webkit-tap-highlight-color:transparent!important;
+ outline:none!important;
+ box-shadow:none!important;
+ caret-color:#167e88!important
+}
+#loginEmail:focus,#signupEmail:focus,.auth-input:focus{
+ outline:none!important;box-shadow:none!important;background:transparent!important
+}
+.email-field:focus-within{outline:none!important;box-shadow:0 8px 24px rgba(22,126,136,.10)!important;border-color:#b9dadd!important}
+::selection{background:rgba(22,126,136,.16)}
 </style></head><body>
 <div id="authGate" class="auth-gate" dir="rtl">
   <section class="auth-card" aria-label="تسجيل الدخول إلى مَوَدَّة">
