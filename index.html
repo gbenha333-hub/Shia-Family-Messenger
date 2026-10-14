@@ -1,3 +1,18 @@
-<!doctype html><html lang="ar" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>مَوَدَّة | شبكة الأسرة والطفل الشيعي</title></head><body><p id="loading">جاري فتح مَوَدَّة…</p><script>
-(async()=>{try{const r=await fetch('./messenger.html?v=bb780084',{cache:'no-store'});let h=await r.text();h=h.replace('</body>','<script src="./src/auth-password.js?v=bb780084"><\\/script></body>');document.open();document.write(h);document.close()}catch(e){document.getElementById('loading').textContent='تعذر فتح التطبيق. أعد المحاولة.'}})();
+<!doctype html>
+<html lang="ar" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>مَوَدَّة | شبكة الأسرة والطفل الشيعي</title></head>
+<body><p id="loading">جاري فتح مَوَدَّة…</p>
+<script>
+(async()=>{
+ try{
+  const response=await fetch('./messenger.html?v=auth-fix-20261014',{cache:'no-store'});
+  if(!response.ok)throw new Error('Failed to load application');
+  let html=await response.text();
+  const authScript='<script src="./src/auth-password.js?v=auth-fix-20261014"></'+'script>';
+  html=html.replace('</body>',authScript+'</body>');
+  document.open();document.write(html);document.close();
+ }catch(error){
+  document.getElementById('loading').textContent='تعذر فتح التطبيق. أعد المحاولة.';
+  console.error(error);
+ }
+})();
 </script></body></html>
